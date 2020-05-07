@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GOT</string>
+    <string name="start_point">Start point</string>
+    <string name="search">Search</string>
+</resources>
