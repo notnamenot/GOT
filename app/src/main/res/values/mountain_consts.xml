@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="r_sudety">Sudety</string> <!-- r - mountain range -->
+    <string name="sniezka">Śnieżka</string>
+
+    <string name="c_gory_orlickie">Góry Orlickie</string> <!-- c - mountain chain -->
+    <string name="c_gory_bystrzyckie">Góry Bystrzyckie</string>
+    <string name="c_gory_stolowe">Góry Stołowe</string>
+
+    <string name="orlica">Orlica</string>
+    <string name="soltysia_kopa">Sołtysia Kopa</string>
+    <string name="sch_zieleniec">Schronisko PTTK Zieleniec</string>  <!-- sch - schronisko -->
+
+<!--    -->
+    <string name="r_karpaty">Karpaty</string>
+    <string name="gerlach">Gerlach</string>
+
+<!--    -->
+    <string name="r_gory_swietokrzyskie">Góry Świętokrzyskie</string>
+    <string name="lysica">Łysica</string>
+
+</resources>
