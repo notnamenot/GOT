@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">GOT</string>
-    <string name="start_point">Start point</string>
-    <string name="search">Search</string>
+    <string name="start_point">Punkt początkowy</string>
+    <string name="end_point">Punkt końcowy</string>
+    <string name="search">Szukaj</string>
+    <string name="search_route">Szukaj trasy</string>
+    <string name="trips">Moje wycieczki</string>
+    <string name="badges">Moje odznaki</string>
 </resources>
