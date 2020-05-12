@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.edu.agh.wtm.got.models.GOTPoint;
+import pl.edu.agh.wtm.got.models.MountainChain;
+import pl.edu.agh.wtm.got.models.MountainRange;
 
 //View -> Tool Windows -> Device File Explorer -> data -> data
 //https://www.youtube.com/watch?v=hDSVInZ2JCs
@@ -34,6 +36,8 @@ public class GOTdao extends SQLiteOpenHelper{
     public static final Object COLUMN_POINTS = "POINTS";
     public static final String COLUMN_FROM = "GOT_POINT_FROM";
     public static final String COLUMN_TO = "GOT_POINT_TO";
+
+
 
     private  Context context;
     // context - reference to apliccation itself, name of db to create
@@ -66,8 +70,6 @@ public class GOTdao extends SQLiteOpenHelper{
                 COLUMN_NAME + " TEXT," +
                 COLUMN_HEIGHT + " INTEGER," +
                 COLUMN_MOUNTAIN_CHAIN_ID + " INTEGER)";
-//                COLUMN_TARGET_NAME + " TEXT," + // docelowo powino być ID
-//                COLUMN_POINTS + " INTEGER)";
 
         String createRouteTableStatement = "CREATE TABLE " + ROUTE_TABLE + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -87,14 +89,7 @@ public class GOTdao extends SQLiteOpenHelper{
 //        cv.put(COLUMN_PEAK, "Śnieżka");
 //        db.insert(MOUNTAIN_RANGE_TABLE, null,cv);
 //
-//        int id = 1;//getMountainRangeId("Sudety");
-//        db.execSQL("INSERT INTO " + MOUNTAIN_CHAIN_TABLE + "(NAME,LENGTH,MOUNTAIN_RANGE_ID) VALUES('Góry Orlickie',50,"+id +")" );
 //
-//
-//        GOTPoint GOTpoint;
-//        GOTpoint = new GOTPoint(1,"Orlica",1084,1);
-//        db.execSQL("INSERT INTO " + GOT_POINT_TABLE + "(NAME,HEIGHT,MOUNTAIN_CHAIN_ID) VALUES('Orlica',1084,"+id +")" );
-
         fillMountainRanges(db);
         fillMountainChains(db);
         fillGOTPoints(db);
@@ -138,6 +133,52 @@ public class GOTdao extends SQLiteOpenHelper{
     }
 
 
+    public List<MountainRange> getAllMountainRanges() {
+        List<MountainRange> list = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + MOUNTAIN_RANGE_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString,null);
+        if (cursor.moveToFirst()) {//move to the first result of resultset - if true there were results
+            System.out.println("cursor not empty");
+            do {
+                int mountainRangeId = cursor.getInt(0);
+                String name = cursor.getString(1);
+                int length = cursor.getInt(2);
+                String peak = cursor.getString(3);
+
+                MountainRange range = new MountainRange(mountainRangeId,name,length,peak);
+                list.add(range);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+    public List<MountainChain> getMountainChains(int _mountainRangeId) {
+        List<MountainChain> list = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + MOUNTAIN_CHAIN_TABLE + " WHERE " + COLUMN_MOUNTAIN_RANGE_ID + " = " + _mountainRangeId ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString,null);
+        if (cursor.moveToFirst()) {
+            System.out.println("cursor not empty");
+            do {
+                int mountainChainId = cursor.getInt(0);
+                String name = cursor.getString(1);
+                int length = cursor.getInt(2);
+                int mountainRangeId = cursor.getInt(3);
+
+                MountainChain range = new MountainChain(mountainChainId,name,length,mountainRangeId);
+                list.add(range);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return list;
+    }
 
     public List<GOTPoint> getAllGOTPoints() {
         List<GOTPoint> list = new ArrayList<>();
@@ -152,6 +193,33 @@ public class GOTdao extends SQLiteOpenHelper{
 
         if (cursor.moveToFirst()) {//move to the first result of resultset - if true there were results
             System.out.println("cursor not empty");
+            do {
+                int GOTPointId = cursor.getInt(0);
+                String name = cursor.getString(1);
+                int height = cursor.getInt(2);
+                int mountainChainId = cursor.getInt(3);
+
+                GOTPoint point = new GOTPoint(GOTPointId,name,height,mountainChainId);
+                list.add(point);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+    public List<GOTPoint> getGOTPoints(int _mountainChainId) {
+        List<GOTPoint> list = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + GOT_POINT_TABLE + " WHERE " + COLUMN_MOUNTAIN_CHAIN_ID + " = " + _mountainChainId;
+
+        System.out.println(queryString);
+
+        SQLiteDatabase db = this.getReadableDatabase(); // kiedy jest Writeable do robi na niej locka
+
+        Cursor cursor = db.rawQuery(queryString,null);
+
+        if (cursor.moveToFirst()) {//move to the first result of resultset - if true there were results
             do {
                 int GOTPointId = cursor.getInt(0);
                 String name = cursor.getString(1);
@@ -295,5 +363,7 @@ public class GOTdao extends SQLiteOpenHelper{
                 return null;
         }
     }
+
+
 
 }

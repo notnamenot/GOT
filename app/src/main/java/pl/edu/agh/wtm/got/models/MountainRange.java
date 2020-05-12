@@ -22,7 +22,13 @@ public class MountainRange {
         return peak;
     }
 
-    public MountainRange(String name, int length, String peak) {
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    public MountainRange(int id, String name, int length, String peak) {
+        this.id = id;
         this.name = name;
         this.length = length;
         this.peak = peak;
