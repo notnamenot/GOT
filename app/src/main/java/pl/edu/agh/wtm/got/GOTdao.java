@@ -2,7 +2,6 @@ package pl.edu.agh.wtm.got;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -14,6 +13,7 @@ import java.util.List;
 import pl.edu.agh.wtm.got.models.GOTPoint;
 import pl.edu.agh.wtm.got.models.MountainChain;
 import pl.edu.agh.wtm.got.models.MountainRange;
+import pl.edu.agh.wtm.got.models.Subroute;
 
 //View -> Tool Windows -> Device File Explorer -> data -> data
 //https://www.youtube.com/watch?v=hDSVInZ2JCs
@@ -31,15 +31,45 @@ public class GOTdao extends SQLiteOpenHelper{
     public static final String COLUMN_HEIGHT = "HEIGHT";
     public static final String COLUMN_NAME = "NAME";
     public static final String COLUMN_LENGTH = "LENGTH";
+    public static final String COLUMN_TIME = "TIME";
     public static final String COLUMN_PEAK = "PEAK";
-//    public static final Object COLUMN_TARGET_NAME = "TARGET_NAME";
-    public static final Object COLUMN_POINTS = "POINTS";
+    public static final String COLUMN_POINTS = "POINTS";
     public static final String COLUMN_FROM = "GOT_POINT_FROM";
     public static final String COLUMN_TO = "GOT_POINT_TO";
+    public static final String COLUMN_SUM_DOWNS = "SUM_DOWNS";
+    public static final String COLUMN_SUM_UPS = "SUM_UPS";
 
+    // łańcuch górski - np. Sudety
+    public static final String CREATE_MOUNTAIN_RANGE_TABLE_STATEMENT = "CREATE TABLE " + MOUNTAIN_RANGE_TABLE + " (" +
+            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            COLUMN_NAME + " TEXT," +
+            COLUMN_LENGTH + " INTEGER," +
+            COLUMN_PEAK + " TEXT)"; // id?
 
+    public static final String CREATE_MOUNTAIN_CHAIN_TABLE_STATEMENT = "CREATE TABLE " + MOUNTAIN_CHAIN_TABLE + " (" +
+            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            COLUMN_NAME + " TEXT," +
+            COLUMN_LENGTH + " INTEGER," +
+            COLUMN_MOUNTAIN_RANGE_ID + " INTEGER)";
+
+    public static final String CREATE_GOT_POINT_TABLE_STATEMENT = "CREATE TABLE " + GOT_POINT_TABLE + " (" +
+            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            COLUMN_NAME + " TEXT," +
+            COLUMN_HEIGHT + " INTEGER," +
+            COLUMN_MOUNTAIN_CHAIN_ID + " INTEGER)";
+
+    public static final String CREATE_ROUTE_TABLE_STATEMENT = "CREATE TABLE " + ROUTE_TABLE + " (" +
+            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            COLUMN_FROM + " INTEGER," + // GOTPointId
+            COLUMN_TO + " INTEGER," +   //GOTPointId
+            COLUMN_POINTS + " INTEGER," +
+            COLUMN_LENGTH + " REAL," +
+            COLUMN_TIME + " INTEGER," +
+            COLUMN_SUM_UPS + " INTEGER," +
+            COLUMN_SUM_DOWNS + " INTEGER)";
 
     private  Context context;
+
     // context - reference to apliccation itself, name of db to create
 //    public GOTdao(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
     public GOTdao(@Nullable Context context) {
@@ -50,38 +80,10 @@ public class GOTdao extends SQLiteOpenHelper{
     //this is called the first time a database  is accessed
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-        // łańcuch górski - np. Sudety
-        String createMountainRangeTableStatement = "CREATE TABLE " + MOUNTAIN_RANGE_TABLE + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_NAME + " TEXT," +
-                COLUMN_LENGTH + " INTEGER," +
-                COLUMN_PEAK + " TEXT)"; // Zamiast tego id ?
-
-        //pasmo
-        String createMountainChainTableStatement = "CREATE TABLE " + MOUNTAIN_CHAIN_TABLE + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_NAME + " TEXT," +
-                COLUMN_LENGTH + " INTEGER," +
-                COLUMN_MOUNTAIN_RANGE_ID + " INTEGER)";
-
-        String createGOTPointTableStatement = "CREATE TABLE " + GOT_POINT_TABLE + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_NAME + " TEXT," +
-                COLUMN_HEIGHT + " INTEGER," +
-                COLUMN_MOUNTAIN_CHAIN_ID + " INTEGER)";
-
-        String createRouteTableStatement = "CREATE TABLE " + ROUTE_TABLE + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_FROM + " INTEGER," + // GOTPointId
-                COLUMN_TO + " INTEGER," +   //GOTPointId
-                COLUMN_POINTS + " INTEGER," +
-                COLUMN_LENGTH + " REAL)";
-
-        db.execSQL(createMountainRangeTableStatement);
-        db.execSQL(createMountainChainTableStatement);
-        db.execSQL(createGOTPointTableStatement);
-        db.execSQL(createRouteTableStatement);
+        db.execSQL(CREATE_MOUNTAIN_RANGE_TABLE_STATEMENT);
+        db.execSQL(CREATE_MOUNTAIN_CHAIN_TABLE_STATEMENT);
+        db.execSQL(CREATE_GOT_POINT_TABLE_STATEMENT);
+        db.execSQL(CREATE_ROUTE_TABLE_STATEMENT);
 
 //        ContentValues cv = new ContentValues(); //  tablica asocjacyjna/hashmap valuename-content
 //        cv.put(COLUMN_NAME, "Sudety");
@@ -93,7 +95,7 @@ public class GOTdao extends SQLiteOpenHelper{
         fillMountainRanges(db);
         fillMountainChains(db);
         fillGOTPoints(db);
-        fillRoutes(db);
+        fillSubroutes(db);
     }
 
     // this is called when the database (version) changes
@@ -140,7 +142,6 @@ public class GOTdao extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString,null);
         if (cursor.moveToFirst()) {//move to the first result of resultset - if true there were results
-            System.out.println("cursor not empty");
             do {
                 int mountainRangeId = cursor.getInt(0);
                 String name = cursor.getString(1);
@@ -163,7 +164,6 @@ public class GOTdao extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString,null);
         if (cursor.moveToFirst()) {
-            System.out.println("cursor not empty");
             do {
                 int mountainChainId = cursor.getInt(0);
                 String name = cursor.getString(1);
@@ -184,7 +184,6 @@ public class GOTdao extends SQLiteOpenHelper{
         List<GOTPoint> list = new ArrayList<>();
 
         String queryString = "SELECT * FROM " + GOT_POINT_TABLE;
-
         System.out.println(queryString);
 
         SQLiteDatabase db = this.getReadableDatabase(); // kiedy jest Writeable do robi na niej locka
@@ -192,7 +191,6 @@ public class GOTdao extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(queryString,null);
 
         if (cursor.moveToFirst()) {//move to the first result of resultset - if true there were results
-            System.out.println("cursor not empty");
             do {
                 int GOTPointId = cursor.getInt(0);
                 String name = cursor.getString(1);
@@ -236,73 +234,118 @@ public class GOTdao extends SQLiteOpenHelper{
     }
 
     private void fillMountainRanges(SQLiteDatabase db) {
-        //String queryString = "INSERT INTO " + MOUNTAIN_RANGE_TABLE + "(NAME,LENGTH,PEAK) VALUES('Sudety',300,'Śnieżka')";
-        //String insertQuery;
+        List<MountainRange> mountainRanges = new ArrayList<>();
+        mountainRanges.add(new MountainRange(0, getResource(R.string.r_sudety),300, getResource(R.string.sniezka)));
+        mountainRanges.add(new MountainRange(0, getResource(R.string.r_karpaty),1500, getResource(R.string.gerlach)));
+        mountainRanges.add(new MountainRange(0, getResource(R.string.r_gory_swietokrzyskie),70, getResource(R.string.lysica)));
 
-        //insertQuery = makeInsertQuery(MOUNTAIN_RANGE_TABLE,new String[] {"Sudety",Integer.toString(300),"Śnieżka"});
-        db.execSQL(makeInsertQuery(MOUNTAIN_RANGE_TABLE,new String[] {getResource(R.string.r_sudety),Integer.toString(300),getResource(R.string.sniezka)}));
-        db.execSQL(makeInsertQuery(MOUNTAIN_RANGE_TABLE,new String[] {getResource(R.string.r_karpaty),Integer.toString(1500),getResource(R.string.gerlach)}));
-        db.execSQL(makeInsertQuery(MOUNTAIN_RANGE_TABLE,new String[] {getResource(R.string.r_gory_swietokrzyskie),Integer.toString(70),getResource(R.string.lysica)}));
+        insertMountainRanges(db, mountainRanges);
+//        db.execSQL(makeInsertQuery(MOUNTAIN_RANGE_TABLE,new String[] {getResource(R.string.r_sudety),Integer.toString(300),getResource(R.string.sniezka)}));
     }
 
     private void fillMountainChains(SQLiteDatabase db) {
         int mountainRangeId = getMountainRangeId(db, getResource(R.string.r_sudety));
         System.out.println("mountainRangeId" + mountainRangeId);
 
-        db.execSQL(makeInsertQuery(MOUNTAIN_CHAIN_TABLE,new String[] {getResource(R.string.c_gory_orlickie),Integer.toString(50),Integer.toString(mountainRangeId)}));
-        db.execSQL(makeInsertQuery(MOUNTAIN_CHAIN_TABLE,new String[] {getResource(R.string.c_gory_bystrzyckie),Integer.toString(40),Integer.toString(mountainRangeId)}));
-        db.execSQL(makeInsertQuery(MOUNTAIN_CHAIN_TABLE,new String[] {getResource(R.string.c_gory_stolowe),Integer.toString(100),Integer.toString(mountainRangeId)}));
+        List<MountainChain> mountainChains = new ArrayList<>();
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_gory_orlickie), 50, mountainRangeId));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_gory_bystrzyckie), 40, mountainRangeId));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_gory_stolowe), 100, mountainRangeId));
 
-//        mountainRangeId = getMountainRangeId(db, getResource(R.string.r_karpaty));
+        insertMountainChains(db, mountainChains);
     }
 
     private void fillGOTPoints(SQLiteDatabase db) {
         int mountainChainId = getMountainChainId(db, getResource(R.string.c_gory_orlickie));
-
         System.out.println("mountainChainId" + mountainChainId);
 
-        db.execSQL(makeInsertQuery(GOT_POINT_TABLE,new String[] {getResource(R.string.orlica),Integer.toString(1084),Integer.toString(mountainChainId)}));
-        db.execSQL(makeInsertQuery(GOT_POINT_TABLE,new String[] {getResource(R.string.soltysia_kopa),Integer.toString(896),Integer.toString(mountainChainId)}));
-        db.execSQL(makeInsertQuery(GOT_POINT_TABLE,new String[] {getResource(R.string.sch_zieleniec),Integer.toString(850),Integer.toString(mountainChainId)}));
+        List<GOTPoint> gotPoints = new ArrayList<GOTPoint>();
+        gotPoints.add(new GOTPoint(0, getResource(R.string.orlica),1084, mountainChainId));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.soltysia_kopa),896, mountainChainId));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.sch_zieleniec),850, mountainChainId));
+
+        insertGOTPoints(db, gotPoints);
     }
 
-    private String getResource(int resource) {
-        return this.context.getString(resource);
-
-    }
-
-    private void fillRoutes(SQLiteDatabase db) {
+    private void fillSubroutes(SQLiteDatabase db) {
         int orlica = getGOTPointId(db,getResource(R.string.orlica)); // TPG - turystyczne przejście graniczne
         int soltysia_kopa = getGOTPointId(db,getResource(R.string.soltysia_kopa));
         int sch_zieleniec = getGOTPointId(db,getResource(R.string.sch_zieleniec));
 
-        db.execSQL(makeInsertQuery(ROUTE_TABLE,new String[] {Integer.toString(orlica),Integer.toString(soltysia_kopa),Integer.toString(2), Double.toString(1.6)}));
-        db.execSQL(makeInsertQuery(ROUTE_TABLE,new String[] {Integer.toString(soltysia_kopa),Integer.toString(orlica),Integer.toString(4), Double.toString(1.6)}));
-        db.execSQL(makeInsertQuery(ROUTE_TABLE,new String[] {Integer.toString(orlica),Integer.toString(sch_zieleniec),Integer.toString(3), Double.toString(3.6)}));
-        db.execSQL(makeInsertQuery(ROUTE_TABLE,new String[] {Integer.toString(sch_zieleniec),Integer.toString(orlica),Integer.toString(5), Double.toString(3.6)}));
-        db.execSQL(makeInsertQuery(ROUTE_TABLE,new String[] {Integer.toString(sch_zieleniec),Integer.toString(soltysia_kopa),Integer.toString(3), Double.toString(4.6)}));
-        db.execSQL(makeInsertQuery(ROUTE_TABLE,new String[] {Integer.toString(soltysia_kopa),Integer.toString(sch_zieleniec),Integer.toString(6), Double.toString(4.6)}));
+        List<Subroute> subroutes = new ArrayList<>();
+        subroutes.add(new Subroute(0, soltysia_kopa, orlica,2,1.6,45,177,1));
+        subroutes.add(new Subroute(0, orlica, soltysia_kopa,2,1.6,25,1,177));
+        subroutes.add(new Subroute(0, orlica,sch_zieleniec,3,3.6,55,227,11));
+        subroutes.add(new Subroute(0, sch_zieleniec,orlica,5,3.6,75,227,11));
+        subroutes.add(new Subroute(0, sch_zieleniec,soltysia_kopa,3,4.6,90,201,161));
+        subroutes.add(new Subroute(0, soltysia_kopa,sch_zieleniec,6,4.6,25,161,201));
+
+        insertSubroutes(db,subroutes);
     }
 
+    private void insertMountainRanges(SQLiteDatabase db, List<MountainRange> mountainRanges) {
+        ContentValues cv = new ContentValues();
+        for (MountainRange mountainRange : mountainRanges) {
+            cv.put(COLUMN_NAME, mountainRange.getName());
+            cv.put(COLUMN_LENGTH, mountainRange.getLength());
+            cv.put(COLUMN_PEAK, mountainRange.getPeak());
+            db.insert(MOUNTAIN_RANGE_TABLE,null,cv);
+            cv.clear();
+        }
+    }
 
+    private void insertMountainChains(SQLiteDatabase db, List<MountainChain> mountainChains) {
+        ContentValues cv = new ContentValues();
+        for (MountainChain mountainChain : mountainChains) {
+            cv.put(COLUMN_NAME, mountainChain.getName());
+            cv.put(COLUMN_LENGTH, mountainChain.getLength());
+            cv.put(COLUMN_MOUNTAIN_RANGE_ID, mountainChain.getMountainRangeId());
 
+            db.insert(MOUNTAIN_CHAIN_TABLE,null,cv);
+            cv.clear();
+        }
+    }
+    // TODO funkcja ktora dostaje listę kolumn i listę obiektów do wstawienia
+    private void insertGOTPoints(SQLiteDatabase db, List<GOTPoint> gotPoints) { // TODO czy db może dależeć do klasy?
+        ContentValues cv = new ContentValues();
+        for (GOTPoint gotPoint : gotPoints) {
+            cv.put(COLUMN_NAME, gotPoint.getName());
+            cv.put(COLUMN_HEIGHT, gotPoint.getHeight());
+            cv.put(COLUMN_MOUNTAIN_CHAIN_ID, gotPoint.getMountainChainId());
 
+            db.insert(GOT_POINT_TABLE,null,cv);
+            cv.clear();
+        }
+    }
 
-    public int getMountainRangeId(SQLiteDatabase db, String mountainRangeName) {
+    private void insertSubroutes(SQLiteDatabase db, List<Subroute> subroutes) {
+        ContentValues cv = new ContentValues();
+        for (Subroute subroute : subroutes) {
+            cv.put(COLUMN_FROM, subroute.getFrom());
+            cv.put(COLUMN_TO, subroute.getTo());
+            cv.put(COLUMN_LENGTH, subroute.getLength());
+            cv.put(COLUMN_TIME, subroute.getTime());
+            cv.put(COLUMN_POINTS, subroute.getPoints());
+            cv.put(COLUMN_SUM_UPS, subroute.getSum_ups());
+            cv.put(COLUMN_SUM_DOWNS, subroute.getSum_downs());
+
+            db.insert(ROUTE_TABLE,null,cv);
+            cv.clear();
+        }
+    }
+
+    private int getMountainRangeId(SQLiteDatabase db, String mountainRangeName) {
         int id;
         String queryString = "SELECT ID FROM " + MOUNTAIN_RANGE_TABLE + " WHERE NAME = '" + mountainRangeName + "'";
 
         System.out.println(queryString);
-//        SQLiteDatabase db = this.getReadableDatabase(); // kiedy jest readable do robi na niej locka
 
         Cursor cursor = db. rawQuery(queryString,null);
         if (cursor.moveToFirst()) {
             id = cursor.getInt(0);
-//            System.out.println("got id from cursor" + id );
         }
         else {
             id = 1;
-//            System.out.println("didnt get id from cursor" );
         }
 
         cursor.close();
@@ -318,11 +361,9 @@ public class GOTdao extends SQLiteOpenHelper{
         Cursor cursor = db. rawQuery(queryString,null);
         if (cursor.moveToFirst()) {
             id = cursor.getInt(0);
-//            System.out.println("got id from cursor" + id );
         }
         else {
             id = 1;
-//            System.out.println("didnt get id from cursor" );
         }
         cursor.close();
 
@@ -348,22 +389,11 @@ public class GOTdao extends SQLiteOpenHelper{
         return id;
     }
 
-    private String makeInsertQuery(String table, String[] values) {
-        switch (table) {
-            case MOUNTAIN_RANGE_TABLE:
-                return "INSERT INTO " + table + "(" + COLUMN_NAME + "," + COLUMN_LENGTH + "," + COLUMN_PEAK + ") VALUES('" + values[0] + "'," + values[1] + ",'" + values[2] + "')";
-            case MOUNTAIN_CHAIN_TABLE:
-                return "INSERT INTO " + table + "(" + COLUMN_NAME + "," + COLUMN_LENGTH + "," + COLUMN_MOUNTAIN_RANGE_ID + ") VALUES('" + values[0] + "'," + values[1] + "," + values[2] + ")";
-            case GOT_POINT_TABLE:
-                return "INSERT INTO " + table + "(" + COLUMN_NAME + "," + COLUMN_HEIGHT + "," + COLUMN_MOUNTAIN_CHAIN_ID + ") VALUES('" + values[0] + "'," + values[1] + "," + values[2] + ")";
-            case ROUTE_TABLE:
-                for (String s : values) System.out.println(s);
-                return "INSERT INTO " + table + "("+ COLUMN_FROM + "," + COLUMN_TO + "," + COLUMN_POINTS + "," + COLUMN_LENGTH + ") VALUES (" + values[0] + "," + values[1] + "," + values[2] + "," + values[3] +")";
-            default:
-                return null;
-        }
+
+
+    private String getResource(int resource) {
+        return this.context.getString(resource);
+
     }
-
-
 
 }

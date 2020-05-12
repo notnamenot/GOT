@@ -30,6 +30,11 @@ public class GOTPoint {
     }
 
 
+    public void update(String name, int height, int mountainChainId) {
+        this.name = name;
+        this.height = height;
+        this.mountainChainId = mountainChainId;
+    }
 
     @Override
     public String toString() {
