@@ -1,4 +1,4 @@
-package pl.edu.agh.wtm.got;
+package pl.edu.agh.wtm.got.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.edu.agh.wtm.got.R;
 import pl.edu.agh.wtm.got.models.GOTPoint;
 
 public class AutoCompleteGOTPointAdapter extends ArrayAdapter<GOTPoint> {

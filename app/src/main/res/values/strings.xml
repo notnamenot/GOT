@@ -8,4 +8,9 @@
     <string name="badges">Moje odznaki</string>
     <string name="select_mountain_range">-- Wybierz łańcuch górski --</string>
     <string name="select_mountain_chain">-- Wybierz pasmo górskie --</string>
+    <string name="points">Punkty</string>
+    <string name="length">Odległość</string>
+    <string name="time">Czas</string>
+    <string name="ups">Podejść</string>
+    <string name="downs">Zejść</string>
 </resources>

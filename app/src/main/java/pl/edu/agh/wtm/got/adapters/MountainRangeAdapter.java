@@ -1,4 +1,4 @@
-package pl.edu.agh.wtm.got;
+package pl.edu.agh.wtm.got.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import pl.edu.agh.wtm.got.R;
 import pl.edu.agh.wtm.got.models.MountainRange;
 
 public class MountainRangeAdapter extends BaseAdapter {

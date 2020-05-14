@@ -26,24 +26,30 @@
 package pl.edu.agh.wtm.got;
 
         import androidx.appcompat.app.AppCompatActivity;
+        import androidx.recyclerview.widget.DividerItemDecoration;
+        import androidx.recyclerview.widget.LinearLayoutManager;
+        import androidx.recyclerview.widget.RecyclerView;
 
         import android.os.AsyncTask;
         import android.os.Bundle;
         import android.util.Log;
         import android.view.View;
         import android.widget.AdapterView;
-        import android.widget.ArrayAdapter;
         import android.widget.AutoCompleteTextView;
         import android.widget.Button;
-        import android.widget.ListView;
         import android.widget.Spinner;
 
         import java.util.ArrayList;
         import java.util.List;
 
+        import pl.edu.agh.wtm.got.adapters.AutoCompleteGOTPointAdapter;
+        import pl.edu.agh.wtm.got.adapters.MountainChainAdapter;
+        import pl.edu.agh.wtm.got.adapters.MountainRangeAdapter;
+        import pl.edu.agh.wtm.got.adapters.RouteAdapter;
         import pl.edu.agh.wtm.got.models.GOTPoint;
         import pl.edu.agh.wtm.got.models.MountainChain;
         import pl.edu.agh.wtm.got.models.MountainRange;
+        import pl.edu.agh.wtm.got.models.Route;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -51,18 +57,20 @@ public class SearchActivity extends AppCompatActivity {
     //reference to controls on layout
     Button btnSearch;
 //    EditText edt_start_point;
-    ListView lv;
+//    ListView lv;
     Spinner spnMountainRanges;
     Spinner spnMountainChains;
     AutoCompleteTextView edtStartPoint;
     AutoCompleteTextView edtEndPoint;
+    RecyclerView rvRoutes;
 
-    ArrayAdapter arrayAdapter;
+//    ArrayAdapter arrayAdapter;
 //    ArrayAdapter mountainRangeAdapter;
 //    ArrayAdapter mountainChainAdapter;
     MountainRangeAdapter mountainRangeAdapter;
     MountainChainAdapter mountainChainAdapter;
     AutoCompleteGOTPointAdapter GOTPointAdapter;
+    RouteAdapter routeAdapter;
 
     MountainRange promptMountainRange;// = new MountainRange(0, getApplicationContext().getString(R.string.select_mountain_range),0,"");
     MountainChain promptMountainChain;// = new MountainChain(0,getApplicationContext().getString(R.string.select_mountain_chain),0,0);
@@ -70,6 +78,7 @@ public class SearchActivity extends AppCompatActivity {
 
     List<MountainChain> mountainChainSuggestions;
     List<GOTPoint> GOTPointSuggestions;
+    List<Route> possibleRoutes;
 
     GOTdao dao;
 
@@ -79,13 +88,15 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        btnSearch = findViewById(R.id.btn_search); //R od resource folder
 //        edt_start_point = findViewById(R.id.edt_start_point);
-        lv = findViewById(R.id.lv);
+//        lv = findViewById(R.id.lv);
         spnMountainRanges = findViewById(R.id.spn_mountain_ranges);
         spnMountainChains = findViewById(R.id.spn_mountain_chains);
         edtStartPoint = findViewById(R.id.actv_start_point);
         edtEndPoint = findViewById(R.id.actv_end_point);
+        btnSearch = findViewById(R.id.btn_search); //R od resource folder
+        rvRoutes = findViewById(R.id.rv_routes);
+
 
         dao = new GOTdao(SearchActivity.this);
 
@@ -108,13 +119,26 @@ public class SearchActivity extends AppCompatActivity {
         mountainChainAdapter = new MountainChainAdapter(SearchActivity.this, mountainChainSuggestions);
         spnMountainChains.setAdapter(mountainChainAdapter);
 
-        arrayAdapter = new ArrayAdapter<GOTPoint>(SearchActivity.this,android.R.layout.simple_list_item_1,dao.getAllGOTPoints()); //predefined adapter giving string
-        lv.setAdapter(arrayAdapter); // associate adapter with control on the screen
+//        arrayAdapter = new ArrayAdapter<GOTPoint>(SearchActivity.this,android.R.layout.simple_list_item_1,dao.getAllGOTPoints()); //predefined adapter giving string
+//        lv.setAdapter(arrayAdapter); // associate adapter with control on the screen
 
         GOTPointSuggestions = new ArrayList<GOTPoint>();
         GOTPointAdapter = new AutoCompleteGOTPointAdapter( SearchActivity.this, GOTPointSuggestions);
         edtEndPoint.setAdapter(GOTPointAdapter);
         edtStartPoint.setAdapter(GOTPointAdapter);
+
+
+
+        possibleRoutes = new ArrayList<>();
+        possibleRoutes.add(new Route(0,10,5.8,420, 200,120));
+        possibleRoutes.add(new Route(1,15,7.2,560, 150,30));
+
+        routeAdapter = new RouteAdapter(possibleRoutes);
+        rvRoutes.setLayoutManager(new LinearLayoutManager(this));
+        rvRoutes.setAdapter(routeAdapter);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        rvRoutes.addItemDecoration(dividerItemDecoration);
 
 
         spnMountainRanges.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -181,17 +205,17 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) { //position - whick item was clicked
-//                GOTPoint clickedPoint = (GOTPoint) parent.getItemAtPosition(position);
-//                dao.deleteOne(clickedPoint);
-//
-//                GOTPointAdapter = new ArrayAdapter<GOTPoint>(SearchActivity.this,android.R.layout.simple_list_item_1,dao.getAllGOTPoints()); //predefined adapter giving string
-//                //associate adapter with control on the screen
-//                lv.setAdapter(GOTPointAdapter);
-            }
-        });
+//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) { //position - whick item was clicked
+////                GOTPoint clickedPoint = (GOTPoint) parent.getItemAtPosition(position);
+////                dao.deleteOne(clickedPoint);
+////
+////                GOTPointAdapter = new ArrayAdapter<GOTPoint>(SearchActivity.this,android.R.layout.simple_list_item_1,dao.getAllGOTPoints()); //predefined adapter giving string
+////                //associate adapter with control on the screen
+////                lv.setAdapter(GOTPointAdapter);
+//            }
+//        });
 
     }
 

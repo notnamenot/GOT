@@ -60,12 +60,13 @@ public class Route {
         this.sumDowns = sumDowns;
     }
 
-    public Route(int id, double length, int time, int points, int sumUps, int sumDowns) {
+    public Route(int id, int points, double length, int time, int sumUps, int sumDowns) {
         this.id = id;
         this.length = length;
         this.time = time;
         this.points = points;
         this.sumUps = sumUps;
         this.sumDowns = sumDowns;
+        System.out.println("creating route");
     }
 }
