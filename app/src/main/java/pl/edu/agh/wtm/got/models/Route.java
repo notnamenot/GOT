@@ -3,14 +3,22 @@ package pl.edu.agh.wtm.got.models;
 import java.util.List;
 
 public class Route {
+    public List<Subroute> getSubroutes() {
+        return subroutes;
+    }
+
+    public void setSubroutes(List<Subroute> subroutes) {
+        this.subroutes = subroutes;
+    }
+
     private List<Subroute> subroutes;
     private List<GOTPoint> gotPoints;
     private int id;
     private double length;
     private int time;
     private int points;
-    private int sumUps;
-    private int sumDowns;
+    private int ups;
+    private int downs;
 
     public int getId() {
         return id;
@@ -44,20 +52,20 @@ public class Route {
         this.points = points;
     }
 
-    public int getSumUps() {
-        return sumUps;
+    public int getUps() {
+        return ups;
     }
 
-    public void setSumUps(int sumUps) {
-        this.sumUps = sumUps;
+    public void setUps(int ups) {
+        this.ups = ups;
     }
 
-    public int getSumDowns() {
-        return sumDowns;
+    public int getDowns() {
+        return downs;
     }
 
-    public void setSumDowns(int sumDowns) {
-        this.sumDowns = sumDowns;
+    public void setDowns(int downs) {
+        this.downs = downs;
     }
 
     public Route(int id, int points, double length, int time, int sumUps, int sumDowns) {
@@ -65,8 +73,23 @@ public class Route {
         this.length = length;
         this.time = time;
         this.points = points;
-        this.sumUps = sumUps;
-        this.sumDowns = sumDowns;
+        this.ups = sumUps;
+        this.downs = sumDowns;
         System.out.println("creating route");
+    }
+
+    public Route(int id, int points, double length, int time, int sumUps, int sumDowns,List<GOTPoint> gotPoints) {
+        this.id = id;
+        this.length = length;
+        this.time = time;
+        this.points = points;
+        this.ups = sumUps;
+        this.downs = sumDowns;
+        this.gotPoints = gotPoints;
+        System.out.println("creating route");
+    }
+
+    public List<GOTPoint> getGOTPoints() {
+        return gotPoints;
     }
 }

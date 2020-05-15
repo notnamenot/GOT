@@ -326,8 +326,8 @@ public class GOTdao extends SQLiteOpenHelper{
             cv.put(COLUMN_LENGTH, subroute.getLength());
             cv.put(COLUMN_TIME, subroute.getTime());
             cv.put(COLUMN_POINTS, subroute.getPoints());
-            cv.put(COLUMN_SUM_UPS, subroute.getSum_ups());
-            cv.put(COLUMN_SUM_DOWNS, subroute.getSum_downs());
+            cv.put(COLUMN_SUM_UPS, subroute.getUps());
+            cv.put(COLUMN_SUM_DOWNS, subroute.getDowns());
 
             db.insert(ROUTE_TABLE,null,cv);
             cv.clear();

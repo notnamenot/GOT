@@ -7,8 +7,8 @@ public class Subroute {
     private int points;
     private double length;
     private int time;
-    private int sum_ups;
-    private int sum_downs;
+    private int ups;
+    private int downs;
 
     public Subroute(int id, int from, int to, int points, double length, int time, int sum_ups, int sum_downs) {
         this.id = id;
@@ -17,8 +17,8 @@ public class Subroute {
         this.points = points;
         this.length = length;
         this.time = time;
-        this.sum_ups = sum_ups;
-        this.sum_downs = sum_downs;
+        this.ups = sum_ups;
+        this.downs = sum_downs;
     }
 
     public int getId() {
@@ -69,19 +69,19 @@ public class Subroute {
         this.time = time;
     }
 
-    public int getSum_ups() {
-        return sum_ups;
+    public int getUps() {
+        return ups;
     }
 
-    public void setSum_ups(int sum_ups) {
-        this.sum_ups = sum_ups;
+    public void setUps(int ups) {
+        this.ups = ups;
     }
 
-    public int getSum_downs() {
-        return sum_downs;
+    public int getDowns() {
+        return downs;
     }
 
-    public void setSum_downs(int sum_downs) {
-        this.sum_downs = sum_downs;
+    public void setDowns(int downs) {
+        this.downs = downs;
     }
 }

@@ -129,11 +129,13 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
+        List<GOTPoint> gotPoints = new ArrayList<>();
+        gotPoints.addAll(dao.getAllGOTPoints());
         possibleRoutes = new ArrayList<>();
-        possibleRoutes.add(new Route(0,10,5.8,420, 200,120));
-        possibleRoutes.add(new Route(1,15,7.2,560, 150,30));
+        possibleRoutes.add(new Route(0,10,5.8,420, 200,120,gotPoints));
+        possibleRoutes.add(new Route(1,15,7.2,560, 150,30,gotPoints));
 
-        routeAdapter = new RouteAdapter(possibleRoutes);
+        routeAdapter = new RouteAdapter(this, possibleRoutes);
         rvRoutes.setLayoutManager(new LinearLayoutManager(this));
         rvRoutes.setAdapter(routeAdapter);
 

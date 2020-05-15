@@ -13,4 +13,6 @@
     <string name="time">Czas</string>
     <string name="ups">Podejść</string>
     <string name="downs">Zejść</string>
+    <string name="name">Nazwa</string>
+    <string name="height">Wysokość</string>
 </resources>
