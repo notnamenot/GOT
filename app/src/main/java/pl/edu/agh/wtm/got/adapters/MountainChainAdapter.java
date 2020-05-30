@@ -42,7 +42,7 @@ public class MountainChainAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) { //converView - oneMountainChainLine
         if (convertView == null) { // TODO add it to other adapters for better performance
             LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE); //robi instancje z xmla
-            convertView = inflater.inflate(R.layout.one_line_spinner,parent,false);// specify which layout we want to inflate
+            convertView = inflater.inflate(R.layout.simple_row_item,parent,false);// specify which layout we want to inflate
         }
 
         MountainChain mountainChainItem = this.getItem(position);

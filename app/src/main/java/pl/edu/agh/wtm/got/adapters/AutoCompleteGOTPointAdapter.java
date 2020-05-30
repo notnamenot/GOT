@@ -44,7 +44,7 @@ public class AutoCompleteGOTPointAdapter extends ArrayAdapter<GOTPoint> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) { //to apply custom layout
         if (convertView == null) { // TODO add it to other adapters for better performance
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.one_line_spinner,parent,false); //TODO row zamiast line
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.simple_row_item,parent,false); //TODO row zamiast line
         }
 
         TextView textViewGOTPointName = convertView.findViewById(R.id.my_spinner);

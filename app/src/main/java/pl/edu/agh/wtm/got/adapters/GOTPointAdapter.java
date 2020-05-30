@@ -1,11 +1,8 @@
 package pl.edu.agh.wtm.got.adapters;
 
-import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +12,7 @@ import java.util.List;
 
 import pl.edu.agh.wtm.got.R;
 import pl.edu.agh.wtm.got.models.GOTPoint;
+
 
 public class GOTPointAdapter extends RecyclerView.Adapter<GOTPointAdapter.ViewHolder> {
 
@@ -39,20 +37,18 @@ public class GOTPointAdapter extends RecyclerView.Adapter<GOTPointAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lv_row_details,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_got_point_row_item,parent,false);
         return new GOTPointAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tvName.setText(GOTPointList.get(position).getName());
-        holder.tvHeight.setText(String.valueOf(GOTPointList.get(position).getHeight())+"m");
+        holder.tvHeight.setText(GOTPointList.get(position).getHeight() + "m");
     }
 
     @Override
-    public long getItemId(int position) {
-        return 0;
-    }
+    public long getItemId(int position) { return GOTPointList.get(position).getId(); }
 
     @Override
     public int getItemCount() {
@@ -63,7 +59,7 @@ public class GOTPointAdapter extends RecyclerView.Adapter<GOTPointAdapter.ViewHo
 //    public View getView(int position, View convertView, ViewGroup parent) { //converView - oneMountainChainLine
 //        if (convertView == null) { // TODO add it to other adapters for better performance
 //            LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE); //robi instancje z xmla
-//            convertView = inflater.inflate(R.layout.lv_row_details,parent,false);// specify which layout we want to inflate
+//            convertView = inflater.inflate(R.layout.rv_got_point_row_item,parent,false);// specify which layout we want to inflate
 //        }
 //
 //        GOTPoint gotPoint = this.getItem(position);

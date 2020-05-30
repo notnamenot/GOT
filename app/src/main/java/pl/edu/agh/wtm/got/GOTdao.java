@@ -7,12 +7,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import pl.edu.agh.wtm.got.models.GOTPoint;
 import pl.edu.agh.wtm.got.models.MountainChain;
 import pl.edu.agh.wtm.got.models.MountainRange;
+import pl.edu.agh.wtm.got.models.Route;
 import pl.edu.agh.wtm.got.models.Subroute;
 
 //View -> Tool Windows -> Device File Explorer -> data -> data
@@ -23,7 +26,8 @@ public class GOTdao extends SQLiteOpenHelper{
     public static final String MOUNTAIN_RANGE_TABLE = "MOUNTAIN_RANGE_TABLE";
     public static final String MOUNTAIN_CHAIN_TABLE = "MOUNTAIN_CHAIN_TABLE";
     public static final String GOT_POINT_TABLE = "GOT_POINT_TABLE";
-    public static final String ROUTE_TABLE = "ROUTE_TABLE";
+    public static final String SUBROUTE_TABLE = "SUBROUTE_TABLE";
+    public static final String TRIP_TABLE = "TRIP_TABLE";
 
     public static final String COLUMN_ID = "ID";
     public static final String COLUMN_MOUNTAIN_RANGE_ID = "MOUNTAIN_RANGE_ID";
@@ -38,6 +42,7 @@ public class GOTdao extends SQLiteOpenHelper{
     public static final String COLUMN_TO = "GOT_POINT_TO";
     public static final String COLUMN_SUM_DOWNS = "SUM_DOWNS";
     public static final String COLUMN_SUM_UPS = "SUM_UPS";
+    public static final String COLUMN_DATE = "DATE_INS";
 
     // łańcuch górski - np. Sudety
     public static final String CREATE_MOUNTAIN_RANGE_TABLE_STATEMENT = "CREATE TABLE " + MOUNTAIN_RANGE_TABLE + " (" +
@@ -58,7 +63,7 @@ public class GOTdao extends SQLiteOpenHelper{
             COLUMN_HEIGHT + " INTEGER," +
             COLUMN_MOUNTAIN_CHAIN_ID + " INTEGER)";
 
-    public static final String CREATE_ROUTE_TABLE_STATEMENT = "CREATE TABLE " + ROUTE_TABLE + " (" +
+    public static final String CREATE_SUBROUTE_TABLE_STATEMENT = "CREATE TABLE " + SUBROUTE_TABLE + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             COLUMN_FROM + " INTEGER," + // GOTPointId
             COLUMN_TO + " INTEGER," +   //GOTPointId
@@ -67,6 +72,19 @@ public class GOTdao extends SQLiteOpenHelper{
             COLUMN_TIME + " INTEGER," +
             COLUMN_SUM_UPS + " INTEGER," +
             COLUMN_SUM_DOWNS + " INTEGER)";
+
+    public static final String CREATE_TRIP_TABLE_STATEMENT = "CREATE TABLE " + TRIP_TABLE + " (" +
+            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            COLUMN_FROM + " INTEGER," + // first GOTPointId
+            COLUMN_TO + " INTEGER," +   //last GOTPointId
+            COLUMN_POINTS + " INTEGER," +
+            COLUMN_LENGTH + " REAL," +
+            COLUMN_TIME + " INTEGER," +
+            COLUMN_SUM_UPS + " INTEGER," +
+            COLUMN_SUM_DOWNS + " INTEGER," +
+//            COLUMN_DATE + " INTEGER)";
+            COLUMN_DATE + " TEXT)";
+//            COLUMN_DATE + " created_at DATETIME DEFAULT CURRENT_TIMESTAMP)";
 
     private  Context context;
 
@@ -83,7 +101,8 @@ public class GOTdao extends SQLiteOpenHelper{
         db.execSQL(CREATE_MOUNTAIN_RANGE_TABLE_STATEMENT);
         db.execSQL(CREATE_MOUNTAIN_CHAIN_TABLE_STATEMENT);
         db.execSQL(CREATE_GOT_POINT_TABLE_STATEMENT);
-        db.execSQL(CREATE_ROUTE_TABLE_STATEMENT);
+        db.execSQL(CREATE_SUBROUTE_TABLE_STATEMENT);
+        db.execSQL(CREATE_TRIP_TABLE_STATEMENT);
 
 //        ContentValues cv = new ContentValues(); //  tablica asocjacyjna/hashmap valuename-content
 //        cv.put(COLUMN_NAME, "Sudety");
@@ -115,9 +134,10 @@ public class GOTdao extends SQLiteOpenHelper{
             cursor.close();
             return true;
         }
-        else
+        else {
             cursor.close();
             return false;
+        }
     }
 
     public boolean addOne(GOTPoint point) {
@@ -233,6 +253,149 @@ public class GOTdao extends SQLiteOpenHelper{
         return list;
     }
 
+    public GOTPoint getGOTPoint(int gotPointId_) {
+
+//        private int getMountainRangeId(SQLiteDatabase db, String mountainRangeName) {
+//            int id;
+            String queryString = "SELECT * FROM " + GOT_POINT_TABLE + " WHERE ID = " + gotPointId_;
+//
+            System.out.println(queryString);
+//
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        GOTPoint point = null;
+        Cursor cursor = db. rawQuery(queryString,null);
+        if (cursor.moveToFirst()) {//move to the first result of resultset - if true there were results
+//            do {
+                int GOTPointId = cursor.getInt(0);
+                String name = cursor.getString(1);
+                int height = cursor.getInt(2);
+                int mountainChainId = cursor.getInt(3);
+
+            point = new GOTPoint(GOTPointId,name,height,mountainChainId);
+//            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return point;
+    }
+
+    public List<Subroute> getSubroutes(int _mountainChainId) {
+        List<Subroute> list = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + SUBROUTE_TABLE + " WHERE " +
+                COLUMN_FROM + " in ( SELECT " + COLUMN_ID + " FROM " + GOT_POINT_TABLE + " WHERE " +
+                    COLUMN_MOUNTAIN_CHAIN_ID + " = " + _mountainChainId + ")";
+
+        System.out.println(queryString);
+
+        SQLiteDatabase db = this.getReadableDatabase(); // kiedy jest Writeable do robi na niej locka
+
+        Cursor cursor = db.rawQuery(queryString,null);
+
+        if (cursor.moveToFirst()) {//move to the first result of resultset - if true there were results
+            do {
+                int subrouteIid = cursor.getInt(0);
+                int gotPointFrom = cursor.getInt(1);
+                int gotPointTo = cursor.getInt(2);
+                int points = cursor.getInt(3);
+                double length = cursor.getDouble(4);
+                int time = cursor.getInt(5);
+                int ups = cursor.getInt(6);
+                int downs = cursor.getInt(7);
+
+                Subroute subroute = new Subroute(subrouteIid,gotPointFrom,gotPointTo,points,length,time,ups,downs);
+                list.add(subroute);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+
+    public Subroute getSubroute(int from_, int to_) {
+//        List<Subroute> list = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + SUBROUTE_TABLE + " WHERE " +
+                COLUMN_FROM + " = ? and " + COLUMN_TO + " = ?";
+
+        String[] selectionArgs = new String[] {String.valueOf(from_), String.valueOf(to_)};
+
+        System.out.println(queryString);
+
+        SQLiteDatabase db = this.getReadableDatabase(); // kiedy jest Writeable do robi na niej locka
+
+        Subroute subroute = null;
+        Cursor cursor = db.rawQuery(queryString,selectionArgs);
+        if (cursor.moveToFirst()) {//move to the first result of resultset - if true there were results
+//            do {
+                int subrouteId = cursor.getInt(0); //cursor.getInt(cursor.getColumnIndex("id"));
+                int gotPointFrom = cursor.getInt(1);
+                int gotPointTo = cursor.getInt(2);
+                int points = cursor.getInt(3);
+                double length = cursor.getDouble(4);
+                int time = cursor.getInt(5);
+                int ups = cursor.getInt(6);
+                int downs = cursor.getInt(7);
+
+                subroute = new Subroute(subrouteId,gotPointFrom,gotPointTo,points,length,time,ups,downs);
+//                list.add(subroute);
+//            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return subroute;
+    }
+
+    public boolean insertTrip(Route route) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues(); //  tablica asocjacyjna/hashmap valuename-content
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf.format((new Date()));
+        System.out.println("today " + today);
+
+        cv.put(COLUMN_FROM, route.getGotPoints().get(0).getId());
+        cv.put(COLUMN_TO, route.getGotPoints().get(route.getGotPoints().size()-1).getId());
+        cv.put(COLUMN_POINTS, route.getPoints());
+        cv.put(COLUMN_LENGTH, route.getLength());
+        cv.put(COLUMN_TIME, route.getTime());
+        cv.put(COLUMN_SUM_UPS, route.getUps());
+        cv.put(COLUMN_SUM_DOWNS, route.getDowns());
+        cv.put(COLUMN_DATE, today);
+
+        long insert = db.insert(TRIP_TABLE, null, cv);
+        db.close();
+
+        return insert == -1 ? false : true;
+    }
+
+
+    public int getGotPointsCnt(int mountainChainId) {
+//        String queryString = "SELECT DISTINCT " + COLUMN_FROM + ", COUNT(*)" + " FROM " + ROUTE_TABLE + " WHERE " +
+//                COLUMN_FROM + " in ( SELECT " + COLUMN_ID + " FROM " + GOT_POINT_TABLE + " WHERE " +
+//                COLUMN_MOUNTAIN_CHAIN_ID + " = " + _mountainChainId + ")";
+
+        String queryString = "SELECT COUNT(*) FROM " + GOT_POINT_TABLE + " WHERE " + COLUMN_MOUNTAIN_CHAIN_ID + " = " + mountainChainId;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        System.out.println(queryString);
+        int cnt;
+        Cursor cursor = db.rawQuery(queryString,null);
+        if (cursor.moveToFirst()) {
+            cnt = cursor.getInt(0);
+        }
+        else {
+            cnt = 0;
+        }
+        cursor.close();
+        db.close();
+        System.out.println(cnt);
+        return cnt;
+    }
+
     private void fillMountainRanges(SQLiteDatabase db) {
         List<MountainRange> mountainRanges = new ArrayList<>();
         mountainRanges.add(new MountainRange(0, getResource(R.string.r_sudety),300, getResource(R.string.sniezka)));
@@ -263,6 +426,11 @@ public class GOTdao extends SQLiteOpenHelper{
         gotPoints.add(new GOTPoint(0, getResource(R.string.orlica),1084, mountainChainId));
         gotPoints.add(new GOTPoint(0, getResource(R.string.soltysia_kopa),896, mountainChainId));
         gotPoints.add(new GOTPoint(0, getResource(R.string.sch_zieleniec),850, mountainChainId));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.kozia_hala),740, mountainChainId));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.duszniki_zdroj),533, mountainChainId));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.duszniki_zdroj_park),540, mountainChainId));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.prz_polskie_wrota),660, mountainChainId));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.ludowe),675, mountainChainId));
 
         insertGOTPoints(db, gotPoints);
     }
@@ -271,14 +439,31 @@ public class GOTdao extends SQLiteOpenHelper{
         int orlica = getGOTPointId(db,getResource(R.string.orlica)); // TPG - turystyczne przejście graniczne
         int soltysia_kopa = getGOTPointId(db,getResource(R.string.soltysia_kopa));
         int sch_zieleniec = getGOTPointId(db,getResource(R.string.sch_zieleniec));
+        int kozia_hala = getGOTPointId(db,getResource(R.string.kozia_hala));
+        int duszniki_zdroj = getGOTPointId(db,getResource(R.string.duszniki_zdroj));
+        int duszniki_zdroj_park = getGOTPointId(db,getResource(R.string.duszniki_zdroj_park));
+        int prz_polskie_wrota = getGOTPointId(db,getResource(R.string.prz_polskie_wrota));
+        int ludowe = getGOTPointId(db,getResource(R.string.ludowe));
 
         List<Subroute> subroutes = new ArrayList<>();
-        subroutes.add(new Subroute(0, soltysia_kopa, orlica,2,1.6,45,177,1));
-        subroutes.add(new Subroute(0, orlica, soltysia_kopa,2,1.6,25,1,177));
-        subroutes.add(new Subroute(0, orlica,sch_zieleniec,3,3.6,55,227,11));
+        subroutes.add(new Subroute(0, soltysia_kopa,orlica,2,1.6,45,177,1));
+        subroutes.add(new Subroute(0, orlica,soltysia_kopa,2,1.6,25,1,177));
+        subroutes.add(new Subroute(0, orlica,sch_zieleniec,3,3.6,55,11,227));
         subroutes.add(new Subroute(0, sch_zieleniec,orlica,5,3.6,75,227,11));
-        subroutes.add(new Subroute(0, sch_zieleniec,soltysia_kopa,3,4.6,90,201,161));
-        subroutes.add(new Subroute(0, soltysia_kopa,sch_zieleniec,6,4.6,25,161,201));
+//        subroutes.add(new Subroute(0, sch_zieleniec,soltysia_kopa,3,4.6,90,201,161)); // po drodze jest orlica!
+//        subroutes.add(new Subroute(0, soltysia_kopa,sch_zieleniec,6,4.6,25,161,201));
+        subroutes.add(new Subroute(0, soltysia_kopa,kozia_hala,3,3.1,45,26,191));
+        subroutes.add(new Subroute(0, kozia_hala,soltysia_kopa,5,3.1,65,191,26));
+        subroutes.add(new Subroute(0, duszniki_zdroj_park,kozia_hala,5,3.4,70,237,34));
+        subroutes.add(new Subroute(0, kozia_hala,duszniki_zdroj_park,3,3.4,55,34,237));
+        subroutes.add(new Subroute(0, duszniki_zdroj_park,duszniki_zdroj,1,1.2,20,15,22));
+        subroutes.add(new Subroute(0, duszniki_zdroj,duszniki_zdroj_park,1,1.2,20,22,15));
+        subroutes.add(new Subroute(0, kozia_hala,prz_polskie_wrota,2,2.1,40,42,125));
+        subroutes.add(new Subroute(0, prz_polskie_wrota,kozia_hala,3,2.1,45,125,42));
+        subroutes.add(new Subroute(0, prz_polskie_wrota,ludowe,0,0.3,5,19,4));
+        subroutes.add(new Subroute(0, ludowe,prz_polskie_wrota,0,0.3,5,4,19));
+        subroutes.add(new Subroute(0, ludowe,duszniki_zdroj,3,3.3,50,22,164));
+        subroutes.add(new Subroute(0, duszniki_zdroj,ludowe,5,3.3,65,164,22));
 
         insertSubroutes(db,subroutes);
     }
@@ -306,7 +491,7 @@ public class GOTdao extends SQLiteOpenHelper{
         }
     }
     // TODO funkcja ktora dostaje listę kolumn i listę obiektów do wstawienia
-    private void insertGOTPoints(SQLiteDatabase db, List<GOTPoint> gotPoints) { // TODO czy db może dależeć do klasy?
+    private void insertGOTPoints(SQLiteDatabase db, List<GOTPoint> gotPoints) { // TODO czy db może należeć do klasy?
         ContentValues cv = new ContentValues();
         for (GOTPoint gotPoint : gotPoints) {
             cv.put(COLUMN_NAME, gotPoint.getName());
@@ -329,7 +514,7 @@ public class GOTdao extends SQLiteOpenHelper{
             cv.put(COLUMN_SUM_UPS, subroute.getUps());
             cv.put(COLUMN_SUM_DOWNS, subroute.getDowns());
 
-            db.insert(ROUTE_TABLE,null,cv);
+            db.insert(SUBROUTE_TABLE,null,cv);
             cv.clear();
         }
     }
@@ -363,7 +548,7 @@ public class GOTdao extends SQLiteOpenHelper{
             id = cursor.getInt(0);
         }
         else {
-            id = 1;
+            id = 0;
         }
         cursor.close();
 
@@ -389,11 +574,11 @@ public class GOTdao extends SQLiteOpenHelper{
         return id;
     }
 
-
-
     private String getResource(int resource) {
         return this.context.getString(resource);
 
     }
+
+
 
 }

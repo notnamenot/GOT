@@ -1,5 +1,7 @@
 package pl.edu.agh.wtm.got.models;
 
+import java.util.List;
+
 public class GOTPoint {
     private int id;
     private String name;

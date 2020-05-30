@@ -38,6 +38,7 @@ package pl.edu.agh.wtm.got;
         import android.widget.AutoCompleteTextView;
         import android.widget.Button;
         import android.widget.Spinner;
+        import android.widget.Toast;
 
         import java.util.ArrayList;
         import java.util.List;
@@ -69,7 +70,7 @@ public class SearchActivity extends AppCompatActivity {
 //    ArrayAdapter mountainChainAdapter;
     MountainRangeAdapter mountainRangeAdapter;
     MountainChainAdapter mountainChainAdapter;
-    AutoCompleteGOTPointAdapter GOTPointAdapter;
+    AutoCompleteGOTPointAdapter actvGOTPointAdapter;
     RouteAdapter routeAdapter;
 
     MountainRange promptMountainRange;// = new MountainRange(0, getApplicationContext().getString(R.string.select_mountain_range),0,"");
@@ -81,6 +82,9 @@ public class SearchActivity extends AppCompatActivity {
     List<Route> possibleRoutes;
 
     GOTdao dao;
+
+    GOTPoint startPoint;
+    GOTPoint endPoint;
 
 
     @Override
@@ -123,17 +127,17 @@ public class SearchActivity extends AppCompatActivity {
 //        lv.setAdapter(arrayAdapter); // associate adapter with control on the screen
 
         GOTPointSuggestions = new ArrayList<GOTPoint>();
-        GOTPointAdapter = new AutoCompleteGOTPointAdapter( SearchActivity.this, GOTPointSuggestions);
-        edtEndPoint.setAdapter(GOTPointAdapter);
-        edtStartPoint.setAdapter(GOTPointAdapter);
+        actvGOTPointAdapter = new AutoCompleteGOTPointAdapter( SearchActivity.this, GOTPointSuggestions);
+        edtEndPoint.setAdapter(actvGOTPointAdapter);
+        edtStartPoint.setAdapter(actvGOTPointAdapter);
 
 
 
-        List<GOTPoint> gotPoints = new ArrayList<>();
-        gotPoints.addAll(dao.getAllGOTPoints());
+//        List<GOTPoint> gotPoints = new ArrayList<>();
+//        gotPoints.addAll(dao.getAllGOTPoints());
         possibleRoutes = new ArrayList<>();
-        possibleRoutes.add(new Route(0,10,5.8,420, 200,120,gotPoints));
-        possibleRoutes.add(new Route(1,15,7.2,560, 150,30,gotPoints));
+//        possibleRoutes.add(new Route(0,10,5.8,420, 200,120,gotPoints));
+//        possibleRoutes.add(new Route(1,15,7.2,560, 150,30,gotPoints));
 
         routeAdapter = new RouteAdapter(this, possibleRoutes);
         rvRoutes.setLayoutManager(new LinearLayoutManager(this));
@@ -153,7 +157,12 @@ public class SearchActivity extends AppCompatActivity {
                     mountainChainSuggestions.add(promptMountainChain);
                     mountainChainSuggestions.addAll(filteredMountainChains);
                     mountainChainAdapter.notifyDataSetChanged();
-                    edtStartPoint.clearListSelection();
+
+//                    edtStartPoint.clearListSelection();
+                edtStartPoint.setText("");
+                edtEndPoint.setText("");
+                startPoint = null;
+                endPoint = null;
 //                        new reloadMountainChainSuggestions(mountainRange.getId());
 //                }
             }
@@ -171,18 +180,74 @@ public class SearchActivity extends AppCompatActivity {
 
                 GOTPointSuggestions.clear();
                 GOTPointSuggestions.addAll(filteredGOTPoints);
-                GOTPointAdapter.notifyDataSetChangedAll();
+                actvGOTPointAdapter.notifyDataSetChangedAll();
+
+                edtStartPoint.setText("");
+                edtEndPoint.setText("");
+                startPoint = null;
+                endPoint = null;
+
+
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
+        edtStartPoint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                startPoint =  actvGOTPointAdapter.getItem(position);
+                Toast.makeText(SearchActivity.this,
+                        actvGOTPointAdapter.getItem(position).toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        edtEndPoint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                endPoint =  actvGOTPointAdapter.getItem(position);
+                Toast.makeText(SearchActivity.this,
+                        actvGOTPointAdapter.getItem(position).toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//        edtStartPoint.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(SearchActivity.this," selected", Toast.LENGTH_LONG).show();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
         //button listeners
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//
+//            int from = edtStartPoint.getAdapter().get();
+//            System.out.println("From:"+from);
+
+                            //(edtStartPoint,edtEndPoint,spnMountainChains,)
+//            Graph g  = new Graph(from, to, mountainChainId, this)
+//                Graph g  = new Graph(1, 3, 1, SearchActivity.this);
+//                Graph2 g  = new Graph2(1, 5, 1, SearchActivity.this);
+
+                if (startPoint != null && endPoint != null) {
+                    Graph g = new Graph(startPoint.getId(), endPoint.getId(), startPoint.getMountainChainId(), SearchActivity.this);
+                    possibleRoutes.clear();
+                    possibleRoutes.addAll(g.getFoundRoutes());
+                    routeAdapter.notifyDataSetChanged();
+                }
+
+
 
 //                GOTPoint GOTpoint;
 //                try {

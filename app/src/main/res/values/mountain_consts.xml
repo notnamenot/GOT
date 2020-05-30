@@ -11,6 +11,12 @@
     <string name="orlica">Orlica</string>
     <string name="soltysia_kopa">Sołtysia Kopa</string>
     <string name="sch_zieleniec">Schronisko PTTK Zieleniec</string>  <!-- sch - schronisko -->
+    <string name="kozia_hala">Kozia Hala</string>
+    <string name="duszniki_zdroj">Duszniki-Zdrój</string>
+    <string name="duszniki_zdroj_park">Duszniki-Zdrój, Park Zdrojowy</string>
+    <string name="prz_polskie_wrota">Przełęcz Polskie Wrota</string> <!-- prz - przełęcz -->
+    <string name="ludowe">Ludowe</string>
+
 
 <!--    -->
     <string name="r_karpaty">Karpaty</string>
