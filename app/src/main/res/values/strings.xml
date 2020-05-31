@@ -15,4 +15,8 @@
     <string name="downs">Zejść</string>
     <string name="name">Nazwa</string>
     <string name="height">Wysokość</string>
+    <string name="dash">" - "</string>
+    <string name="date">Data</string>
+    <string name="my_trips">Moje wycieczki</string>
+    <string name="no_trips">Nie dodałeś jeszcze żadnych wycieczek. Aby to zrobić, wybierz opcję "Szukaj trasy" i przytrzymaj długo wybraną trasę.</string>
 </resources>

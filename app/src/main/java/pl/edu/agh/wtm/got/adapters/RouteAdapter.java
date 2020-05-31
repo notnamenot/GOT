@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import pl.edu.agh.wtm.got.BackgroundTask;
 import pl.edu.agh.wtm.got.GOTdao;
 import pl.edu.agh.wtm.got.R;
 import pl.edu.agh.wtm.got.models.Route;
@@ -56,35 +57,6 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
 
     }
 
-    private void calculateRoute(int position) {
-        List<Subroute> subroutes = routeList.get(position).getSubroutes();
-        int points = 0;
-        double length = 0;
-        int time = 0;
-        int ups = 0;
-        int downs = 0;
-        for (Subroute subroute : subroutes) {// TODO dostanie już przeliczony, tu do wywalenia!
-            points += subroute.getPoints();
-            length += subroute.getLength();
-            time += subroute.getTime();
-            ups += subroute.getUps();
-            downs += subroute.getDowns();
-        }
-        routeList.get(position).setPoints(points);
-        routeList.get(position).setLength(length);
-        routeList.get(position).setTime(time);
-        routeList.get(position).setUps(ups);
-        routeList.get(position).setDowns(downs);
-    }
-
-    private int calculatePoints(int position) {
-        List<Subroute> subroutes = routeList.get(position).getSubroutes();
-        int points = 0;
-        for (Subroute subroute : subroutes) {
-            points += subroute.getPoints();
-        }
-        return points;
-    }
 
     @Override
     public int getItemCount() {
@@ -128,13 +100,18 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         public boolean onLongClick(View v) {
             int position = getAdapterPosition();
 
-            Route route = routeList.get(getAdapterPosition());
+            Route route = routeList.get(position);
             System.out.println(route.getPoints() + " looooooooong click");
-            Toast.makeText(mContext,
-                    routeList.get(getAdapterPosition()).toString(),
-                    Toast.LENGTH_LONG).show();
+//            Toast.makeText(mContext,
+////                    routeList.get(getAdapterPosition()).toString(),
+//                    "Dodano wycieczkę",
+//                    Toast.LENGTH_LONG).show();
+//
+//            dao.insertTrip(route);
+//
+            BackgroundTask backgroundTask = new BackgroundTask(mContext,dao,route);
+            backgroundTask.execute("add_trip");
 
-            dao.insertTrip(route);
             return false;
         }
     }

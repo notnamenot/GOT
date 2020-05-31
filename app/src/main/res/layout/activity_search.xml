@@ -39,26 +39,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spn_mountain_ranges" />
-         />
-
-
-<!--    <EditText-->
-<!--        android:id="@+id/edt_start_point"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginLeft="16dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:layout_marginRight="16dp"-->
-<!--        android:ems="10"-->
-<!--        android:hint="@string/start_point"-->
-<!--        android:inputType="textPersonName"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/spn_mountain_chains"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/actv_end_point"/>-->
-
 
     <AutoCompleteTextView
         android:id="@+id/actv_start_point"
@@ -71,6 +51,7 @@
         android:layout_marginRight="16dp"
         android:completionThreshold="1"
         android:hint="@string/start_point"
+        android:inputType="textVisiblePassword"
         app:layout_constraintBottom_toTopOf="@id/actv_end_point"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,6 +67,7 @@
         android:layout_marginRight="16dp"
         android:completionThreshold="1"
         android:hint="@string/end_point"
+        android:inputType="textVisiblePassword"
         app:layout_constraintBottom_toTopOf="@id/btn_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

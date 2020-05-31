@@ -57,12 +57,10 @@ public class SearchActivity extends AppCompatActivity {
     private static final String TAG = "SearchActivity";
     //reference to controls on layout
     Button btnSearch;
-//    EditText edt_start_point;
-//    ListView lv;
     Spinner spnMountainRanges;
     Spinner spnMountainChains;
-    AutoCompleteTextView edtStartPoint;
-    AutoCompleteTextView edtEndPoint;
+    AutoCompleteTextView actvStartPoint;
+    AutoCompleteTextView actvEndPoint;
     RecyclerView rvRoutes;
 
 //    ArrayAdapter arrayAdapter;
@@ -70,7 +68,7 @@ public class SearchActivity extends AppCompatActivity {
 //    ArrayAdapter mountainChainAdapter;
     MountainRangeAdapter mountainRangeAdapter;
     MountainChainAdapter mountainChainAdapter;
-    AutoCompleteGOTPointAdapter actvGOTPointAdapter;
+    AutoCompleteGOTPointAdapter GOTPointAdapter;
     RouteAdapter routeAdapter;
 
     MountainRange promptMountainRange;// = new MountainRange(0, getApplicationContext().getString(R.string.select_mountain_range),0,"");
@@ -92,15 +90,12 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-//        edt_start_point = findViewById(R.id.edt_start_point);
-//        lv = findViewById(R.id.lv);
         spnMountainRanges = findViewById(R.id.spn_mountain_ranges);
         spnMountainChains = findViewById(R.id.spn_mountain_chains);
-        edtStartPoint = findViewById(R.id.actv_start_point);
-        edtEndPoint = findViewById(R.id.actv_end_point);
+        actvStartPoint = findViewById(R.id.actv_start_point);
+        actvEndPoint = findViewById(R.id.actv_end_point);
         btnSearch = findViewById(R.id.btn_search); //R od resource folder
         rvRoutes = findViewById(R.id.rv_routes);
-
 
         dao = new GOTdao(SearchActivity.this);
 
@@ -121,28 +116,17 @@ public class SearchActivity extends AppCompatActivity {
             }
         };
         mountainChainAdapter = new MountainChainAdapter(SearchActivity.this, mountainChainSuggestions);
-        spnMountainChains.setAdapter(mountainChainAdapter);
-
-//        arrayAdapter = new ArrayAdapter<GOTPoint>(SearchActivity.this,android.R.layout.simple_list_item_1,dao.getAllGOTPoints()); //predefined adapter giving string
-//        lv.setAdapter(arrayAdapter); // associate adapter with control on the screen
+        spnMountainChains.setAdapter(mountainChainAdapter); // associate adapter with control on the screen
 
         GOTPointSuggestions = new ArrayList<GOTPoint>();
-        actvGOTPointAdapter = new AutoCompleteGOTPointAdapter( SearchActivity.this, GOTPointSuggestions);
-        edtEndPoint.setAdapter(actvGOTPointAdapter);
-        edtStartPoint.setAdapter(actvGOTPointAdapter);
+        GOTPointAdapter = new AutoCompleteGOTPointAdapter( SearchActivity.this, GOTPointSuggestions);
+        actvStartPoint.setAdapter(GOTPointAdapter);
+        actvEndPoint.setAdapter(GOTPointAdapter);
 
-
-
-//        List<GOTPoint> gotPoints = new ArrayList<>();
-//        gotPoints.addAll(dao.getAllGOTPoints());
         possibleRoutes = new ArrayList<>();
-//        possibleRoutes.add(new Route(0,10,5.8,420, 200,120,gotPoints));
-//        possibleRoutes.add(new Route(1,15,7.2,560, 150,30,gotPoints));
-
         routeAdapter = new RouteAdapter(this, possibleRoutes);
         rvRoutes.setLayoutManager(new LinearLayoutManager(this));
         rvRoutes.setAdapter(routeAdapter);
-
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         rvRoutes.addItemDecoration(dividerItemDecoration);
 
@@ -151,20 +135,21 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 MountainRange mountainRange = (MountainRange) spnMountainRanges.getSelectedItem();
-//                if (0 != mountainRange.getId()) {
-                    List<MountainChain> filteredMountainChains = dao.getMountainChains(mountainRange.getId());
-                    mountainChainSuggestions.clear();
-                    mountainChainSuggestions.add(promptMountainChain);
-                    mountainChainSuggestions.addAll(filteredMountainChains);
-                    mountainChainAdapter.notifyDataSetChanged();
+
+                List<MountainChain> filteredMountainChains = dao.getMountainChains(mountainRange.getId());
+                mountainChainSuggestions.clear();
+                mountainChainSuggestions.add(promptMountainChain);
+                mountainChainSuggestions.addAll(filteredMountainChains);
+                mountainChainAdapter.notifyDataSetChanged();
 
 //                    edtStartPoint.clearListSelection();
-                edtStartPoint.setText("");
-                edtEndPoint.setText("");
+                actvStartPoint.setText("");
+                actvEndPoint.setText("");
                 startPoint = null;
                 endPoint = null;
-//                        new reloadMountainChainSuggestions(mountainRange.getId());
-//                }
+
+                System.out.println("before asynctask");
+//                new ReloadMountainChainSuggestions(mountainRange.getId()).execute();
             }
 
             @Override
@@ -180,65 +165,43 @@ public class SearchActivity extends AppCompatActivity {
 
                 GOTPointSuggestions.clear();
                 GOTPointSuggestions.addAll(filteredGOTPoints);
-                actvGOTPointAdapter.notifyDataSetChangedAll();
+                GOTPointAdapter.notifyDataSetChangedAll();
 
-                edtStartPoint.setText("");
-                edtEndPoint.setText("");
+                actvStartPoint.setText("");
+                actvEndPoint.setText("");
                 startPoint = null;
                 endPoint = null;
-
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        edtStartPoint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        actvStartPoint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) { //setOnItemSelectedListener
 
-                startPoint =  actvGOTPointAdapter.getItem(position);
+                startPoint =  GOTPointAdapter.getItem(position);
                 Toast.makeText(SearchActivity.this,
-                        actvGOTPointAdapter.getItem(position).toString(),
+                        GOTPointAdapter.getItem(position).toString(),
                         Toast.LENGTH_SHORT).show();
             }
         });
 
-        edtEndPoint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        actvEndPoint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                endPoint =  actvGOTPointAdapter.getItem(position);
+                endPoint =  GOTPointAdapter.getItem(position);
                 Toast.makeText(SearchActivity.this,
-                        actvGOTPointAdapter.getItem(position).toString(),
+                        GOTPointAdapter.getItem(position).toString(),
                         Toast.LENGTH_SHORT).show();
             }
         });
 
-//        edtStartPoint.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(SearchActivity.this," selected", Toast.LENGTH_LONG).show();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
 
-        //button listeners
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//
-//            int from = edtStartPoint.getAdapter().get();
-//            System.out.println("From:"+from);
-
-                            //(edtStartPoint,edtEndPoint,spnMountainChains,)
-//            Graph g  = new Graph(from, to, mountainChainId, this)
-//                Graph g  = new Graph(1, 3, 1, SearchActivity.this);
-//                Graph2 g  = new Graph2(1, 5, 1, SearchActivity.this);
 
                 if (startPoint != null && endPoint != null) {
                     Graph g = new Graph(startPoint.getId(), endPoint.getId(), startPoint.getMountainChainId(), SearchActivity.this);
@@ -246,64 +209,32 @@ public class SearchActivity extends AppCompatActivity {
                     possibleRoutes.addAll(g.getFoundRoutes());
                     routeAdapter.notifyDataSetChanged();
                 }
-
-
-
-//                GOTPoint GOTpoint;
-//                try {
-//                    GOTpoint = new GOTPoint(1,"Orlica",1084,1);
-//                } catch (Exception e) {
-//                    GOTpoint = new GOTPoint(-1,"Error",0,-1);
-//                }
-
-//                GOTdao dao = new GOTdao(SearchActivity.this);
-////                boolean success = dao.addOne(GOTpoint);
-//
-////                Toast.makeText(MainActivity.this,"Success=" + success,Toast.LENGTH_SHORT).show();
-//
-//                ///////////
-//                List<GOTPoint> list = dao.getAllGOTPoints();
-////                Toast.makeText(MainActivity.this,list.toString(),Toast.LENGTH_SHORT).show();
-//
-//                pointsAdapter = new ArrayAdapter<GOTPoint>(SearchActivity.this,android.R.layout.simple_list_item_1,list); //predefined adapter giving string
-//                //associate adapter with control on the screen
-//                lv.setAdapter(pointsAdapter);
-
             }
         });
 
-//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) { //position - whick item was clicked
-////                GOTPoint clickedPoint = (GOTPoint) parent.getItemAtPosition(position);
-////                dao.deleteOne(clickedPoint);
-////
-////                GOTPointAdapter = new ArrayAdapter<GOTPoint>(SearchActivity.this,android.R.layout.simple_list_item_1,dao.getAllGOTPoints()); //predefined adapter giving string
-////                //associate adapter with control on the screen
-////                lv.setAdapter(GOTPointAdapter);
-//            }
-//        });
 
     }
-
-    private class reloadMountainChainSuggestions extends AsyncTask<Void,Void,Void> {
-        private int mountainRangeId;
-        reloadMountainChainSuggestions(int mountainRangeId){
-            super();
-            this.mountainRangeId = mountainRangeId;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Log.d(TAG, Thread.currentThread().getStackTrace()[0].getMethodName());
-            List<MountainChain> filteredMountainChains = dao.getMountainChains(mountainRangeId);
-
-            mountainChainSuggestions.clear();
-            mountainChainSuggestions.add(promptMountainChain);
-            mountainChainSuggestions.addAll(filteredMountainChains);
-            for (MountainChain m : mountainChainSuggestions) System.out.println(m);
-            mountainChainAdapter.notifyDataSetChanged();
-            return null;
-        }
-    }
+//
+//    private class ReloadMountainChainSuggestions extends AsyncTask<Void,Void,Void> {
+//        private int mountainRangeId;
+//
+//        ReloadMountainChainSuggestions(int mountainRangeId){
+//            super();
+//            this.mountainRangeId = mountainRangeId;
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            Log.d(TAG, Thread.currentThread().getStackTrace()[0].getMethodName());
+//            List<MountainChain> filteredMountainChains = dao.getMountainChains(mountainRangeId);
+//
+//            mountainChainSuggestions.clear();
+//            mountainChainSuggestions.add(promptMountainChain);
+//            mountainChainSuggestions.addAll(filteredMountainChains);
+//            for (MountainChain m : mountainChainSuggestions) System.out.println(m);
+//            mountainChainAdapter.notifyDataSetChanged();
+//            return null;
+//        }
+//
+//    }
 }

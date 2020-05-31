@@ -17,6 +17,7 @@ import pl.edu.agh.wtm.got.models.MountainChain;
 import pl.edu.agh.wtm.got.models.MountainRange;
 import pl.edu.agh.wtm.got.models.Route;
 import pl.edu.agh.wtm.got.models.Subroute;
+import pl.edu.agh.wtm.got.models.Trip;
 
 //View -> Tool Windows -> Device File Explorer -> data -> data
 //https://www.youtube.com/watch?v=hDSVInZ2JCs
@@ -369,6 +370,33 @@ public class GOTdao extends SQLiteOpenHelper{
         db.close();
 
         return insert == -1 ? false : true;
+    }
+
+    public List<Trip> getAllTrips() {
+        List<Trip> list = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + TRIP_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString,null);
+        if (cursor.moveToFirst()) {//move to the first result of resultset - if true there were results
+            do {
+                int tripId = cursor.getInt(0); //cursor.getInt(cursor.getColumnIndex("id"));
+                int gotPointFrom = cursor.getInt(1);
+                int gotPointTo = cursor.getInt(2);
+                int points = cursor.getInt(3);
+                double length = cursor.getDouble(4);
+                int time = cursor.getInt(5);
+                int sumUps = cursor.getInt(6);
+                int sumDowns = cursor.getInt(7);
+                String date = cursor.getString(8);
+
+                Trip trip = new Trip(tripId,gotPointFrom,gotPointTo,length,time,points,sumUps,sumDowns,date);
+                list.add(trip);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return list;
     }
 
 
