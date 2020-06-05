@@ -32,8 +32,8 @@ public class TripsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.rv_trips_fragment,container,false);
 
-        RecyclerView rvTrips = (RecyclerView) view.findViewById(R.id.rv_trips);
-        TripAdapter tripAdapter = new TripAdapter(getActivity(),dao,trips);
+        RecyclerView rvTrips = view.findViewById(R.id.rv_trips);
+        TripAdapter tripAdapter = new TripAdapter(getActivity(),dao,getFragmentManager(),trips);
         rvTrips.setAdapter(tripAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         rvTrips.addItemDecoration(dividerItemDecoration);

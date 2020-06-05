@@ -25,6 +25,7 @@ public class NoTripsFragment extends Fragment
             @Override
             public void onClick(View v) {
                 Intent goToSearchView = new Intent(v.getContext(),SearchActivity.class);
+                goToSearchView.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);//Intent.FLAG_ACTIVITY_SINGLE_TOP); //TODO kasować back stack
                 startActivity(goToSearchView);
             }
         });

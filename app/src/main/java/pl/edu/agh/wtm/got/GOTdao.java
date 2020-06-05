@@ -372,6 +372,25 @@ public class GOTdao extends SQLiteOpenHelper{
         return insert == -1 ? false : true;
     }
 
+
+    public boolean removeTrip(Trip trip) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String queryString = "DELETE FROM " + TRIP_TABLE + " WHERE " + COLUMN_ID + " = " + trip.getId();
+
+        Cursor cursor = db.rawQuery(queryString,null);
+
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+        }
+        else {
+            cursor.close();
+            return false;
+        }
+    }
+
+
     public List<Trip> getAllTrips() {
         List<Trip> list = new ArrayList<>();
 
@@ -606,7 +625,6 @@ public class GOTdao extends SQLiteOpenHelper{
         return this.context.getString(resource);
 
     }
-
 
 
 }

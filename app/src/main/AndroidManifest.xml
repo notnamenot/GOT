@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TripsActivity" />
+        <activity android:name=".TripDetailActivity" android:configChanges="orientation"></activity>
+        <activity android:name=".NewTripsActivity" android:configChanges="orientation"/>
+        <activity
+            android:name=".TripsActivity"
+            android:configChanges="orientation" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

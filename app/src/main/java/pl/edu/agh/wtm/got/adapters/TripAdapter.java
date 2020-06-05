@@ -1,17 +1,22 @@
 package pl.edu.agh.wtm.got.adapters;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import pl.edu.agh.wtm.got.BackgroundTask;
 import pl.edu.agh.wtm.got.GOTdao;
+import pl.edu.agh.wtm.got.NoTripsFragment;
 import pl.edu.agh.wtm.got.R;
 import pl.edu.agh.wtm.got.models.Route;
 import pl.edu.agh.wtm.got.models.Trip;
@@ -22,11 +27,13 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     List<Trip> tripList;
     private Context mContext;
     GOTdao dao;
+    FragmentManager fragmentManager;
 
-    public TripAdapter(Context mContext, GOTdao dao, List<Trip> tripList) {
+    public TripAdapter(Context mContext, GOTdao dao, FragmentManager fragmentManager, List<Trip> tripList) {
         this.tripList = tripList;
         this.mContext = mContext;
         this.dao = dao;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
@@ -62,7 +69,9 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         return tripList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView tvDateVal, tvFromVal, tvToVal;
         TextView tvPointsVal, tvLengthVal, tvTimeVal, tvUpsVal, tvDownsVal;
 
@@ -80,11 +89,41 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             tvDownsVal = itemView.findViewById(R.id.tv_downs_val);
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
 
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            int position = getAdapterPosition();
+
+            Trip trip = tripList.get(position);
+            System.out.println(trip.getPoints() + " looooooooong click");
+//
+//            BackgroundTask backgroundTask = new BackgroundTask(mContext,dao,trip);
+//            backgroundTask.execute("remove_trip");
+            dao.removeTrip(trip);
+            Toast.makeText(mContext,"Wycieczka usunięta",Toast.LENGTH_LONG).show();
+            tripList.clear();
+            tripList.addAll(dao.getAllTrips());
+
+            if (tripList.size() == 0)
+            {
+                NoTripsFragment NoTripsFragment = new NoTripsFragment();
+//                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.placeholder, NoTripsFragment); //w miejse placeholder tekst że nie ma wycieczek
+                fragmentTransaction.commit();
+            }
+            else {
+                notifyDataSetChanged();
+            }
+
+            return false;
         }
     }
 

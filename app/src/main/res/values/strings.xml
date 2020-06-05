@@ -19,4 +19,7 @@
     <string name="date">Data</string>
     <string name="my_trips">Moje wycieczki</string>
     <string name="no_trips">Nie dodałeś jeszcze żadnych wycieczek. Aby to zrobić, wybierz opcję "Szukaj trasy" i przytrzymaj długo wybraną trasę.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

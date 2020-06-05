@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground">
-
-    <include
-        layout="@layout/route_properties_row_item"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_to_val" />
+    android:layout_height="match_parent">
+<!--    tools:context=".TripsLandFragmentMaster">-->
 
     <TextView
         android:id="@+id/tv_from"
@@ -28,14 +16,14 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_date_val" />
 
     <TextView
-        android:id="@+id/tv_to_val"
+        android:id="@+id/tv_to_vall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/end_point"
         android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/tv_to"
-        app:layout_constraintStart_toStartOf="@+id/tv_from_val" />
+        app:layout_constraintStart_toStartOf="@+id/tv_from_vall" />
 
     <TextView
         android:id="@+id/tv_to"
@@ -44,10 +32,10 @@
         android:layout_marginTop="8dp"
         android:text="@string/end_point"
         app:layout_constraintStart_toStartOf="@+id/tv_from"
-        app:layout_constraintTop_toBottomOf="@+id/tv_from_val" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_from_vall" />
 
     <TextView
-        android:id="@+id/tv_from_val"
+        android:id="@+id/tv_from_vall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -77,7 +65,7 @@
         android:gravity="center"
         android:text="@string/date"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/tv_from_val"
+        app:layout_constraintStart_toStartOf="@+id/tv_from_vall"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
