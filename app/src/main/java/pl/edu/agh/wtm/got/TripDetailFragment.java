@@ -11,6 +11,8 @@ import java.util.List;
 
 import pl.edu.agh.wtm.got.models.Trip;
 
+import static pl.edu.agh.wtm.got.Utils.convertIntToTime;
+
 public class TripDetailFragment extends Fragment {
     public static final String ARG_ITEM_POS = "tripPOS";
     private Trip trip;
@@ -38,14 +40,25 @@ public class TripDetailFragment extends Fragment {
 
         System.out.println("TripDetailFragment.onCreateView trip"+trip);
         if (trip != null) {
-            TextView tvTitle = v.findViewById(R.id.tv_points_val);
-            tvTitle.setText(String.valueOf(trip.getPoints()));
+            TextView tvPoints = v.findViewById(R.id.tv_points_val);
+            tvPoints.setText(String.valueOf(trip.getPoints()));
 
-            TextView tvYear = v.findViewById(R.id.tv_length_val);
-            tvYear.setText(String.valueOf(trip.getLength()));
+            TextView tvLength = v.findViewById(R.id.tv_length_val);
+            tvLength.setText(String.valueOf(trip.getLength()));
+
+            TextView tvTime = v.findViewById(R.id.tv_time_val);
+            tvTime.setText(convertIntToTime(trip.getTime()));
+
+            TextView tvUpsVal = v.findViewById(R.id.tv_ups_val);
+            tvUpsVal.setText(String.valueOf(trip.getUps()));
+
+            TextView tvDownsVal = v.findViewById(R.id.tv_downs_val);
+            tvDownsVal.setText(String.valueOf(trip.getDowns()));
         }
 
         return v;
     }
+
+
 
 }

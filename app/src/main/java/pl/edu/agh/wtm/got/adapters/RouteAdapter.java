@@ -19,6 +19,8 @@ import pl.edu.agh.wtm.got.R;
 import pl.edu.agh.wtm.got.models.Route;
 import pl.edu.agh.wtm.got.models.Subroute;
 
+import static pl.edu.agh.wtm.got.Utils.convertIntToTime;
+
 //responsible for displaying items in recycler view
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> {
 
@@ -116,11 +118,6 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         }
     }
 
-    private String convertIntToTime(int time) {
-        int h = time / 60;
-        int m = time % 60;
-        return h + ":" + m + "h";
-    }
 }
 
 

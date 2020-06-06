@@ -9,6 +9,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -76,6 +77,8 @@ public class NewTripsActivity extends AppCompatActivity implements TripsListFrag
             }
         }
         else {System.out.println("savedInstanceState != null");}
+
+        Toast.makeText(this ,"Dotknij by zobaczyć szczegóły",Toast.LENGTH_LONG).show();
     }
 
     @Override

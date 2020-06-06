@@ -21,6 +21,8 @@ import pl.edu.agh.wtm.got.R;
 import pl.edu.agh.wtm.got.models.Route;
 import pl.edu.agh.wtm.got.models.Trip;
 
+import static pl.edu.agh.wtm.got.Utils.convertIntToTime;
+
 
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
@@ -41,8 +43,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.rv_trip_row_item,parent,false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -125,11 +126,5 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
             return false;
         }
-    }
-
-    private String convertIntToTime(int time) {
-        int h = time / 60;
-        int m = time % 60;
-        return h + ":" + m + "h";
     }
 }

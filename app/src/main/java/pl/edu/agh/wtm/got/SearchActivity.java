@@ -25,6 +25,7 @@
 
 package pl.edu.agh.wtm.got;
 
+        import androidx.annotation.NonNull;
         import androidx.appcompat.app.AppCompatActivity;
         import androidx.recyclerview.widget.DividerItemDecoration;
         import androidx.recyclerview.widget.LinearLayoutManager;
@@ -55,6 +56,10 @@ package pl.edu.agh.wtm.got;
 public class SearchActivity extends AppCompatActivity {
 
     private static final String TAG = "SearchActivity";
+    private static final String SELECTED_MOUNTAIN_RANGE_ID = "MountainRangeId";
+    private static final String SELECTED_MOUNTAIN_CHAIN_ID = "MountainChainId";
+    private static final String SELECTED_START_POINT_ID = "StartPointId";
+    private static final String SELECTED_END_POINT_ID = "EndPointId";
     //reference to controls on layout
     Button btnSearch;
     Spinner spnMountainRanges;
@@ -81,6 +86,8 @@ public class SearchActivity extends AppCompatActivity {
 
     GOTdao dao;
 
+    MountainRange selectedMountainRange;
+    MountainChain selectedMountainChain;
     GOTPoint startPoint;
     GOTPoint endPoint;
 
@@ -134,9 +141,9 @@ public class SearchActivity extends AppCompatActivity {
         spnMountainRanges.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                MountainRange mountainRange = (MountainRange) spnMountainRanges.getSelectedItem();
+                selectedMountainRange = (MountainRange) spnMountainRanges.getSelectedItem();
 
-                List<MountainChain> filteredMountainChains = dao.getMountainChains(mountainRange.getId());
+                List<MountainChain> filteredMountainChains = dao.getMountainChains(selectedMountainRange.getId());
                 mountainChainSuggestions.clear();
                 mountainChainSuggestions.add(promptMountainChain);
                 mountainChainSuggestions.addAll(filteredMountainChains);
@@ -148,7 +155,7 @@ public class SearchActivity extends AppCompatActivity {
                 startPoint = null;
                 endPoint = null;
 
-                System.out.println("before asynctask");
+//                System.out.println("before asynctask");
 //                new ReloadMountainChainSuggestions(mountainRange.getId()).execute();
             }
 
@@ -159,9 +166,9 @@ public class SearchActivity extends AppCompatActivity {
         spnMountainChains.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                MountainChain mountainChain = (MountainChain) spnMountainChains.getSelectedItem();
+                selectedMountainChain = (MountainChain) spnMountainChains.getSelectedItem();
 
-                List<GOTPoint> filteredGOTPoints = dao.getGOTPoints(mountainChain.getId());
+                List<GOTPoint> filteredGOTPoints = dao.getGOTPoints(selectedMountainChain.getId());
 
                 GOTPointSuggestions.clear();
                 GOTPointSuggestions.addAll(filteredGOTPoints);
@@ -214,7 +221,45 @@ public class SearchActivity extends AppCompatActivity {
 
 
     }
-//
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(SELECTED_MOUNTAIN_RANGE_ID, selectedMountainRange.getId());
+        outState.putInt(SELECTED_MOUNTAIN_CHAIN_ID, selectedMountainChain.getId());
+        outState.putInt(SELECTED_START_POINT_ID, startPoint.getId());
+        outState.putInt(SELECTED_END_POINT_ID, endPoint.getId());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        List<MountainChain> filteredMountainChains = dao.getMountainChains(savedInstanceState.getInt(SELECTED_MOUNTAIN_RANGE_ID));
+        mountainChainSuggestions.clear();
+        mountainChainSuggestions.add(promptMountainChain);
+        mountainChainSuggestions.addAll(filteredMountainChains);
+        mountainChainAdapter.notifyDataSetChanged();
+
+        List<GOTPoint> filteredGOTPoints = dao.getGOTPoints(savedInstanceState.getInt(SELECTED_MOUNTAIN_CHAIN_ID));
+        GOTPointSuggestions.clear();
+        GOTPointSuggestions.addAll(filteredGOTPoints);
+        GOTPointAdapter.notifyDataSetChangedAll();
+
+        System.out.println("start:" + savedInstanceState.getInt(SELECTED_START_POINT_ID) + " end:" + savedInstanceState.getInt(SELECTED_END_POINT_ID));
+        GOTPoint startPoint = dao.getGOTPoint(savedInstanceState.getInt(SELECTED_START_POINT_ID));
+        GOTPoint endPoint = dao.getGOTPoint(savedInstanceState.getInt(SELECTED_END_POINT_ID));
+        if (startPoint != null && endPoint != null) {
+            Graph g = new Graph(startPoint.getId(), endPoint.getId(), startPoint.getMountainChainId(), SearchActivity.this);
+            possibleRoutes.clear();
+            possibleRoutes.addAll(g.getFoundRoutes());
+            routeAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+    //
 //    private class ReloadMountainChainSuggestions extends AsyncTask<Void,Void,Void> {
 //        private int mountainRangeId;
 //

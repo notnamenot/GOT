@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ public class TripsListFragment extends ListFragment {
 
     static  interface TripListListener {
         void itemClicked(int pos);
+//        void itemLongClicked(int pos);
     }
 
     private TripListListener listener;
@@ -48,6 +50,24 @@ public class TripsListFragment extends ListFragment {
         System.out.println("trips: "+ trips);
         adapter = new TripMasterAdapter(getActivity(),trips, dao);
         setListAdapter(adapter);
+
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getActivity(), "On long click listener pos " + position, Toast.LENGTH_SHORT).show();
+
+                Trip trip = trips.get(position);
+
+                dao.removeTrip(trip);
+                Toast.makeText(getActivity(),"Wycieczka usunięta",Toast.LENGTH_SHORT).show();
+                trips.clear();
+                trips.addAll(dao.getAllTrips());
+                adapter.notifyDataSetChanged();
+
+                return true;
+            }
+        });
     }
 
     @Override
@@ -78,5 +98,17 @@ public class TripsListFragment extends ListFragment {
             listener.itemClicked(position);
         }
     }
+
+//    @Override
+//    public void onListItemLongClick(ListView l, View v, int position, long id) {
+//        Trip trip = trips.get(position);
+//
+//        Toast.makeText(getActivity(), trip.getDate(), Toast.LENGTH_SHORT).show();
+//
+//        if (listener != null) {
+//            listener.itemLongClicked(position);
+//        }
+//
+//    }
 
 }

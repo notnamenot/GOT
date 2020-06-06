@@ -4,48 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<!--    tools:context=".TripsLandFragmentMaster">-->
 
-    <TextView
-        android:id="@+id/tv_from"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/start_point"
-        app:layout_constraintStart_toStartOf="@+id/tv_date"
-        app:layout_constraintTop_toBottomOf="@+id/tv_date_val" />
-
-    <TextView
-        android:id="@+id/tv_to_vall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/end_point"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_to"
-        app:layout_constraintStart_toStartOf="@+id/tv_from_vall" />
-
-    <TextView
-        android:id="@+id/tv_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/end_point"
-        app:layout_constraintStart_toStartOf="@+id/tv_from"
-        app:layout_constraintTop_toBottomOf="@+id/tv_from_vall" />
-
-    <TextView
-        android:id="@+id/tv_from_vall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:gravity="center"
-        android:text="@string/start_point"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_from"
-        app:layout_constraintStart_toEndOf="@+id/tv_from"
-        app:layout_constraintTop_toTopOf="@+id/tv_from" />
+<!---->
 
     <TextView
         android:id="@+id/tv_date"
@@ -59,13 +19,68 @@
 
     <TextView
         android:id="@+id/tv_date_val"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="start"
+        android:text="@string/date"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_from_vall"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="@string/date"
+        android:text="@string/start_point"
+        app:layout_constraintStart_toStartOf="@+id/tv_date"
+        app:layout_constraintTop_toBottomOf="@+id/tv_date_val" />
+
+    <TextView
+        android:id="@+id/tv_from_vall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="start"
+        android:text="@string/start_point"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/tv_from_vall"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_from"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_from" />
+
+    <TextView
+        android:id="@+id/tv_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/end_point"
+        app:layout_constraintStart_toStartOf="@+id/tv_from"
+        app:layout_constraintTop_toBottomOf="@+id/tv_from_vall" />
+
+    <TextView
+        android:id="@+id/tv_to_vall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="start"
+        android:text="@string/end_point"
+        android:textSize="18sp"
+        android:baselineAligned="false"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_to"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_from_vall" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
