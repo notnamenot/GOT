@@ -20,7 +20,10 @@
         <activity
             android:name=".TripsActivity"
             android:configChanges="orientation" />
-        <activity android:name=".SearchActivity" />
+        <activity
+            android:name=".SearchActivity"
+            android:label="@string/search_route"
+            /> <!-- android:theme="@style/SearchTheme" -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

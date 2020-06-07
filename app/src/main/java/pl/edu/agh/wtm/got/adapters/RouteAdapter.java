@@ -52,6 +52,8 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         holder.tvUpsVal.setText(routeList.get(position).getUps() + "m");
         holder.tvDownsVal.setText(routeList.get(position).getDowns() + "m");
 
+//        holder.tvPointsVal.setTextColor(mContext.getResources().getColor(R.color.colorLightGradient));
+
         GOTPointAdapter gotPointAdapter = new GOTPointAdapter(routeList.get(position).getGotPoints());
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         holder.rvGotPoints.setLayoutManager(layoutManager);

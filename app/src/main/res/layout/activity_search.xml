@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="@drawable/mountain6ab"-->
+<!--    tools:context=".SearchActivity"-->
+<!--    >-->
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity"
-    >
+    android:background="@drawable/mountain6ab">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
 
     <Spinner
         android:id="@+id/spn_mountain_ranges"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
@@ -18,31 +30,32 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:prompt="@string/select_mountain_range"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toTopOf="@+id/spn_mountain_chains"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:spinnerMode="dropdown"/>
+<!--        app:layout_constraintBottom_toTopOf="@+id/spn_mountain_chains"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 <!--    android:spinnerMode="dialog"/"dropdown"-->
+<!--        android:layout_width="0dp"-->
 
     <Spinner
         android:id="@+id/spn_mountain_chains"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:prompt="@string/select_mountain_chain"
-        app:layout_constraintBottom_toTopOf="@+id/actv_start_point"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spn_mountain_ranges" />
+        android:prompt="@string/select_mountain_chain"/>
+<!--        app:layout_constraintBottom_toTopOf="@+id/actv_start_point"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/spn_mountain_ranges" />-->
 
     <AutoCompleteTextView
         android:id="@+id/actv_start_point"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
@@ -52,14 +65,16 @@
         android:completionThreshold="1"
         android:hint="@string/start_point"
         android:inputType="textVisiblePassword"
-        app:layout_constraintBottom_toTopOf="@id/actv_end_point"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spn_mountain_chains" />
+        android:textColor="@color/colorLightGradient"
+        android:textColorHint="@color/colorLightGradient"/>
+<!--        app:layout_constraintBottom_toTopOf="@id/actv_end_point"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/spn_mountain_chains" />-->
 
     <AutoCompleteTextView
         android:id="@+id/actv_end_point"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
@@ -67,35 +82,40 @@
         android:layout_marginRight="16dp"
         android:completionThreshold="1"
         android:hint="@string/end_point"
-        android:inputType="textVisiblePassword"
-        app:layout_constraintBottom_toTopOf="@id/btn_search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/actv_start_point" />
+        android:textColor="@color/colorLightGradient"
+        android:textColorHint="@color/colorLightGradient"
+        android:inputType="textVisiblePassword"/>
+<!--        app:layout_constraintBottom_toTopOf="@id/btn_search"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/actv_start_point" />-->
 
     <Button
         android:id="@+id/btn_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/actv_end_point" />
+        android:gravity="center"/>
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/actv_end_point" />-->
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_routes"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_search" />
+        android:layout_marginBottom="16dp"/>
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/btn_search" />-->
+    </LinearLayout>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+</ScrollView>

@@ -13,6 +13,7 @@
         android:layout_marginLeft="8dp"
         android:text="@string/name"
         android:textSize="18sp"
+        android:textColor="@color/colorLightGradient"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,6 +27,7 @@
         android:layout_marginRight="8dp"
         android:text="@string/height"
         android:textSize="18sp"
+        android:textColor="@color/colorLightGradient"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

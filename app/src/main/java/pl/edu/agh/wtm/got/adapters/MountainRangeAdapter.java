@@ -41,7 +41,7 @@ public class MountainRangeAdapter extends BaseAdapter {
         View oneMountainRangeLine;
 
         LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE); //robi instancje z xmla
-        oneMountainRangeLine = inflater.inflate(R.layout.one_line_spinner_divider,parent,false);// specify which layout we want to inflate
+        oneMountainRangeLine = inflater.inflate(R.layout.simple_row_item,parent,false);// specify which layout we want to inflate one_line_spinner_divider
 
         MountainRange mountainRange = this.getItem(position);
 

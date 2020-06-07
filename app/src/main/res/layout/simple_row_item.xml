@@ -4,5 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:maxLines="1"
-    android:textSize="21sp">
+    android:textSize="21sp"
+    android:textColor="@color/colorLightGradient">
 </TextView>

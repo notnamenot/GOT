@@ -25,33 +25,34 @@
 
 package pl.edu.agh.wtm.got;
 
-        import androidx.annotation.NonNull;
-        import androidx.appcompat.app.AppCompatActivity;
-        import androidx.recyclerview.widget.DividerItemDecoration;
-        import androidx.recyclerview.widget.LinearLayoutManager;
-        import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-        import android.os.AsyncTask;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.AdapterView;
-        import android.widget.AutoCompleteTextView;
-        import android.widget.Button;
-        import android.widget.Spinner;
-        import android.widget.Toast;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-        import java.util.ArrayList;
-        import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
-        import pl.edu.agh.wtm.got.adapters.AutoCompleteGOTPointAdapter;
-        import pl.edu.agh.wtm.got.adapters.MountainChainAdapter;
-        import pl.edu.agh.wtm.got.adapters.MountainRangeAdapter;
-        import pl.edu.agh.wtm.got.adapters.RouteAdapter;
-        import pl.edu.agh.wtm.got.models.GOTPoint;
-        import pl.edu.agh.wtm.got.models.MountainChain;
-        import pl.edu.agh.wtm.got.models.MountainRange;
-        import pl.edu.agh.wtm.got.models.Route;
+import pl.edu.agh.wtm.got.adapters.AutoCompleteGOTPointAdapter;
+import pl.edu.agh.wtm.got.adapters.MountainChainAdapter;
+import pl.edu.agh.wtm.got.adapters.MountainRangeAdapter;
+import pl.edu.agh.wtm.got.adapters.RouteAdapter;
+import pl.edu.agh.wtm.got.models.GOTPoint;
+import pl.edu.agh.wtm.got.models.MountainChain;
+import pl.edu.agh.wtm.got.models.MountainRange;
+import pl.edu.agh.wtm.got.models.Route;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -96,6 +97,11 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) { //starts the app
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_bg));
+        }
 
         spnMountainRanges = findViewById(R.id.spn_mountain_ranges);
         spnMountainChains = findViewById(R.id.spn_mountain_chains);
@@ -187,11 +193,10 @@ public class SearchActivity extends AppCompatActivity {
         actvStartPoint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) { //setOnItemSelectedListener
-
                 startPoint =  GOTPointAdapter.getItem(position);
-                Toast.makeText(SearchActivity.this,
-                        GOTPointAdapter.getItem(position).toString(),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SearchActivity.this,
+//                        GOTPointAdapter.getItem(position).toString(),
+//                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -199,9 +204,9 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 endPoint =  GOTPointAdapter.getItem(position);
-                Toast.makeText(SearchActivity.this,
-                        GOTPointAdapter.getItem(position).toString(),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SearchActivity.this,
+//                        GOTPointAdapter.getItem(position).toString(),
+//                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -215,6 +220,8 @@ public class SearchActivity extends AppCompatActivity {
                     possibleRoutes.clear();
                     possibleRoutes.addAll(g.getFoundRoutes());
                     routeAdapter.notifyDataSetChanged();
+
+                    Toast.makeText(SearchActivity.this, getResources().getText(R.string.press_route), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -226,10 +233,14 @@ public class SearchActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(SELECTED_MOUNTAIN_RANGE_ID, selectedMountainRange.getId());
-        outState.putInt(SELECTED_MOUNTAIN_CHAIN_ID, selectedMountainChain.getId());
-        outState.putInt(SELECTED_START_POINT_ID, startPoint.getId());
-        outState.putInt(SELECTED_END_POINT_ID, endPoint.getId());
+        if (selectedMountainRange != null && selectedMountainChain != null) {
+            outState.putInt(SELECTED_MOUNTAIN_RANGE_ID, selectedMountainRange.getId());
+            outState.putInt(SELECTED_MOUNTAIN_CHAIN_ID, selectedMountainChain.getId());
+        }
+        if (startPoint != null && endPoint != null) {
+            outState.putInt(SELECTED_START_POINT_ID, startPoint.getId());
+            outState.putInt(SELECTED_END_POINT_ID, endPoint.getId());
+        }
     }
 
     @Override
