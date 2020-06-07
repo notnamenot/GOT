@@ -193,7 +193,7 @@ public class SearchActivity extends AppCompatActivity {
         actvStartPoint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) { //setOnItemSelectedListener
-                startPoint =  GOTPointAdapter.getItem(position);
+                startPoint = GOTPointAdapter.getItem(position);
 //                Toast.makeText(SearchActivity.this,
 //                        GOTPointAdapter.getItem(position).toString(),
 //                        Toast.LENGTH_SHORT).show();
@@ -203,7 +203,7 @@ public class SearchActivity extends AppCompatActivity {
         actvEndPoint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                endPoint =  GOTPointAdapter.getItem(position);
+                endPoint = GOTPointAdapter.getItem(position);
 //                Toast.makeText(SearchActivity.this,
 //                        GOTPointAdapter.getItem(position).toString(),
 //                        Toast.LENGTH_SHORT).show();
@@ -259,15 +259,18 @@ public class SearchActivity extends AppCompatActivity {
         GOTPointAdapter.notifyDataSetChangedAll();
 
         System.out.println("start:" + savedInstanceState.getInt(SELECTED_START_POINT_ID) + " end:" + savedInstanceState.getInt(SELECTED_END_POINT_ID));
-        GOTPoint startPoint = dao.getGOTPoint(savedInstanceState.getInt(SELECTED_START_POINT_ID));
-        GOTPoint endPoint = dao.getGOTPoint(savedInstanceState.getInt(SELECTED_END_POINT_ID));
+        startPoint = dao.getGOTPoint(savedInstanceState.getInt(SELECTED_START_POINT_ID));
+        endPoint = dao.getGOTPoint(savedInstanceState.getInt(SELECTED_END_POINT_ID));
         if (startPoint != null && endPoint != null) {
+
+            actvStartPoint.setHint(startPoint.getName());
+            actvEndPoint.setHint(endPoint.getName());
+
             Graph g = new Graph(startPoint.getId(), endPoint.getId(), startPoint.getMountainChainId(), SearchActivity.this);
             possibleRoutes.clear();
             possibleRoutes.addAll(g.getFoundRoutes());
             routeAdapter.notifyDataSetChanged();
         }
-
     }
 
     //

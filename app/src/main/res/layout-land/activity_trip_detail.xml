@@ -4,18 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mountain6_bright"
-    tools:context=".NewTripsActivity">
+    android:background="@drawable/mountain6_land_bright"
+    tools:context=".TripDetailActivity">
 
     <FrameLayout
-        android:id="@+id/fl_trip_list"
+        android:id="@+id/fl_trip_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-    </FrameLayout>
-<!--    fl_trip_master_portrait-->
 
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

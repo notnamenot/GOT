@@ -55,7 +55,6 @@ public class TripMasterAdapter extends BaseAdapter {
 
 
         if (convertView == null) {
-            System.out.println("convertView == null");
             convertView = inflater.inflate(R.layout.fragment_trips_land_master, null);
 
             holder = new ViewHolder();
@@ -65,8 +64,6 @@ public class TripMasterAdapter extends BaseAdapter {
 
             convertView.setTag(holder);
         } else {
-            System.out.println("convertView != null");
-
             holder = (ViewHolder) convertView.getTag();
         }
 

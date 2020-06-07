@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -27,19 +28,17 @@ public class TripDetailFragment extends Fragment {
         dao = new GOTdao(getActivity());
         List<Trip> trips = dao.getAllTrips();
 
-        System.out.println("TripDetailFragment.onCreate getArguments().getInt(ARG_ITEM_POS)" + getArguments().getInt(ARG_ITEM_POS) );
         if (getArguments().containsKey(ARG_ITEM_POS)) {
-            System.out.println("if (getArguments().containsKey(ARG_ITEM_POS)) ");
             trip = trips.get(getArguments().getInt(ARG_ITEM_POS));
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.route_properties_row_item, container, false);
+        View v = inflater.inflate(R.layout.route_properties_row_item_2, container, false);
 
         System.out.println("TripDetailFragment.onCreateView trip"+trip);
-        if (trip != null) {
+        if (trip != null) { // TODO zmienic layout
             TextView tvPoints = v.findViewById(R.id.tv_points_val);
             tvPoints.setText(String.valueOf(trip.getPoints()));
 
@@ -50,10 +49,12 @@ public class TripDetailFragment extends Fragment {
             tvTime.setText(convertIntToTime(trip.getTime()));
 
             TextView tvUpsVal = v.findViewById(R.id.tv_ups_val);
-            tvUpsVal.setText(String.valueOf(trip.getUps()));
+            tvUpsVal.setText(String.valueOf(trip.getUps())+"m");
 
             TextView tvDownsVal = v.findViewById(R.id.tv_downs_val);
-            tvDownsVal.setText(String.valueOf(trip.getDowns()));
+            tvDownsVal.setText(String.valueOf(trip.getDowns())+"m");
+
+//            ListView lvTrips =
         }
 
         return v;

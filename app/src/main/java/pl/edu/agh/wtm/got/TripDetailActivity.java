@@ -1,5 +1,6 @@
 package pl.edu.agh.wtm.got;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.FragmentManager;
@@ -12,6 +13,11 @@ public class TripDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_detail);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_bg));
+        }
 
         if (savedInstanceState == null) {
             TripDetailFragment tripDetailFragment = new TripDetailFragment();

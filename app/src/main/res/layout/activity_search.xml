@@ -12,7 +12,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mountain6ab">
+    android:background="@drawable/mountain6_bright">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,9 +64,9 @@
         android:layout_marginRight="16dp"
         android:completionThreshold="1"
         android:hint="@string/start_point"
-        android:inputType="textVisiblePassword"
-        android:textColor="@color/colorLightGradient"
-        android:textColorHint="@color/colorLightGradient"/>
+        android:textColor="@color/colorDarkGradient"
+        android:textColorHint="@color/colorDarkGradient"
+        android:inputType="textVisiblePassword"/>
 <!--        app:layout_constraintBottom_toTopOf="@id/actv_end_point"-->
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
@@ -82,8 +82,8 @@
         android:layout_marginRight="16dp"
         android:completionThreshold="1"
         android:hint="@string/end_point"
-        android:textColor="@color/colorLightGradient"
-        android:textColorHint="@color/colorLightGradient"
+        android:textColor="@color/colorDarkGradient"
+        android:textColorHint="@color/colorDarkGradient"
         android:inputType="textVisiblePassword"/>
 <!--        app:layout_constraintBottom_toTopOf="@id/btn_search"-->
 <!--        app:layout_constraintEnd_toEndOf="parent"-->

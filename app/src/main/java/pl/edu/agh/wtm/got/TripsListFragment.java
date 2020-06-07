@@ -57,15 +57,15 @@ public class TripsListFragment extends ListFragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 //                Toast.makeText(getActivity(), "On long click listener pos " + position, Toast.LENGTH_SHORT).show();
 
-                Trip trip = trips.get(position);
+            Trip trip = trips.get(position);
 
-                dao.removeTrip(trip);
-                Toast.makeText(getActivity(),"Wycieczka usunięta",Toast.LENGTH_SHORT).show();
-                trips.clear();
-                trips.addAll(dao.getAllTrips());
-                adapter.notifyDataSetChanged();
+            dao.removeTrip(trip);
+            Toast.makeText(getActivity(),"Wycieczka usunięta",Toast.LENGTH_SHORT).show();
+            trips.clear();
+            trips.addAll(dao.getAllTrips());
+            adapter.notifyDataSetChanged();
 
-                return true;
+            return true;
             }
         });
     }
@@ -92,7 +92,7 @@ public class TripsListFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         Trip trip = trips.get(position);
 
-        Toast.makeText(getActivity(), trip.getDate(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), trip.getDate(), Toast.LENGTH_SHORT).show();
 
         if (listener != null) {
             listener.itemClicked(position);

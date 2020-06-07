@@ -57,7 +57,7 @@ public class Graph {
 
 
         System.out.println("Finito");
-        for (ArrayList<Integer> integers : foundPaths) for (Integer integer : integers)  System.out.println("INTEGER " + integer);
+//        for (ArrayList<Integer> integers : foundPaths) for (Integer integer : integers)  System.out.println("INTEGER " + integer);
 
         createRoutesFromFoundPaths();
 

@@ -1,6 +1,7 @@
 package pl.edu.agh.wtm.got;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 //import androidx.fragment.app.FragmentTransaction;
 
@@ -46,6 +47,11 @@ public class NewTripsActivity extends AppCompatActivity implements TripsListFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_trips);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_bg));
+        }
+
         if (savedInstanceState == null) {
             System.out.println("savedInstanceState == null");
             dao = new GOTdao(this);
@@ -78,7 +84,7 @@ public class NewTripsActivity extends AppCompatActivity implements TripsListFrag
         }
         else {System.out.println("savedInstanceState != null");}
 
-        Toast.makeText(this ,"Dotknij by zobaczyć szczegóły",Toast.LENGTH_LONG).show();
+        Toast.makeText(this ,"Dotknij by zobaczyć szczegóły\nPrzytrzymaj by usunąć",Toast.LENGTH_LONG).show();
     }
 
     @Override
