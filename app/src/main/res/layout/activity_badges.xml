@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mountain6_bright"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lay_route_properties2">
+
+        <!--    <LinearLayout-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent"-->
+        <!--        android:orientation="vertical"-->
+        <!--        android:gravity="center">-->
+
+        <ImageView
+            android:id="@+id/img_points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_filter_hdr_black_24dp"
+            android:contentDescription="TODO"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_points_val1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/img_length"
+            />
+
+        <TextView
+            android:id="@+id/tv_points_val1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/points"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="@+id/img_points"
+            app:layout_constraintEnd_toEndOf="@+id/img_points"
+            app:layout_constraintTop_toBottomOf="@+id/img_points"
+            app:layout_constraintBottom_toTopOf="@id/img_length"
+            />
+
+        <ImageView
+            android:id="@+id/img_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_timeline_black_24dp"
+            android:contentDescription="TODO"
+            app:layout_constraintTop_toBottomOf="@+id/tv_points_val1"
+            app:layout_constraintBottom_toTopOf="@id/tv_length_val"
+            app:layout_constraintStart_toEndOf="@+id/img_points"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_length_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/length"
+            android:textSize="24sp"
+            app:layout_constraintTop_toBottomOf="@+id/img_length"
+            app:layout_constraintBottom_toTopOf="@id/img_time"
+            app:layout_constraintStart_toStartOf="@+id/img_length"
+            app:layout_constraintEnd_toEndOf="@id/img_length"
+            />
+
+
+        <ImageView
+            android:id="@+id/img_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_access_time_black_72dp"
+            android:contentDescription="TODO"
+            app:layout_constraintTop_toBottomOf="@+id/tv_length_val"
+            app:layout_constraintBottom_toTopOf="@id/tv_time_val"
+            app:layout_constraintStart_toStartOf="@+id/img_points"
+            />
+
+        <TextView
+            android:id="@+id/tv_time_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time"
+            android:textSize="24sp"
+            app:layout_constraintTop_toBottomOf="@+id/img_time"
+            app:layout_constraintBottom_toTopOf="@+id/img_ups"
+            app:layout_constraintStart_toStartOf="@id/img_time"
+            app:layout_constraintEnd_toEndOf="@+id/img_time"
+            />
+
+
+        <ImageView
+            android:id="@+id/img_ups"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_trending_up_black_72dp"
+            android:contentDescription="TODO"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time_val"
+            app:layout_constraintBottom_toTopOf="@+id/tv_ups_val"
+            app:layout_constraintStart_toStartOf="@+id/img_length"
+            />
+
+        <TextView
+            android:id="@+id/tv_ups_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ups"
+            android:textSize="24sp"
+            app:layout_constraintTop_toBottomOf="@id/img_ups"
+            app:layout_constraintBottom_toTopOf="@+id/img_downs"
+            app:layout_constraintStart_toStartOf="@+id/img_ups"
+            app:layout_constraintEnd_toEndOf="@+id/img_ups"
+            />
+
+
+        <ImageView
+            android:id="@+id/img_downs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_trending_down_black_72dp"
+            android:contentDescription="TODO"
+            app:layout_constraintTop_toBottomOf="@+id/tv_ups_val"
+            app:layout_constraintBottom_toTopOf="@+id/tv_downs_val"
+            app:layout_constraintStart_toStartOf="@id/img_time"
+            />
+
+        <TextView
+            android:id="@+id/tv_downs_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/downs"
+            android:textSize="24sp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/img_downs"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/img_downs"
+            app:layout_constraintEnd_toEndOf="@+id/img_downs"
+            />
+
+
+
+        <!--    </LinearLayout>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -43,7 +43,7 @@ public class TripDetailFragment extends Fragment {
             tvPoints.setText(String.valueOf(trip.getPoints()));
 
             TextView tvLength = v.findViewById(R.id.tv_length_val);
-            tvLength.setText(String.valueOf(trip.getLength()));
+            tvLength.setText(String.valueOf(trip.getLength())+"km");
 
             TextView tvTime = v.findViewById(R.id.tv_time_val);
             tvTime.setText(convertIntToTime(trip.getTime()));

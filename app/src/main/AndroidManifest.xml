@@ -10,20 +10,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".BadgesActivity"
+            android:label="@string/summary" />
+        <activity
             android:name=".TripDetailActivity"
             android:configChanges="orientation"
-            android:label="@string/details"/>
+            android:label="@string/details" />
         <activity
             android:name=".NewTripsActivity"
             android:configChanges="orientation"
-            android:label="@string/trips"/>
+            android:label="@string/trips" />
         <activity
             android:name=".TripsActivity"
             android:configChanges="orientation" />
         <activity
             android:name=".SearchActivity"
-            android:label="@string/search_route"
-            /> <!-- android:theme="@style/SearchTheme" -->
+            android:label="@string/search_route" /> <!-- android:theme="@style/SearchTheme" -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

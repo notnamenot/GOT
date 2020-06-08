@@ -90,9 +90,9 @@ public class TripsListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Trip trip = trips.get(position);
-
+//        Trip trip = trips.get(position);
 //        Toast.makeText(getActivity(), trip.getDate(), Toast.LENGTH_SHORT).show();
+        v.setSelected(true);
 
         if (listener != null) {
             listener.itemClicked(position);

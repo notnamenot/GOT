@@ -49,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btn_badges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToAchievementsView = new Intent(v.getContext(),BadgesActivity.class);
+                startActivity(goToAchievementsView);
+            }
+        });
+
 //        btn_test.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

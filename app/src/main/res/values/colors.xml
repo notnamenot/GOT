@@ -7,4 +7,6 @@
     <color name="colorDarkGradient">#0F2027</color>
     <color name="colorLightGradient">#60a185</color>
     <color name="colorYellow">#c7a51e</color>
+
+    <color name="colorListItemClicked">#4460a185</color> <!-- pierwsze dwa znaki do przezroczystości -->
 </resources>
