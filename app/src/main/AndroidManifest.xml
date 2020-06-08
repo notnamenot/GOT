@@ -18,7 +18,7 @@
             android:label="@string/details" />
         <activity
             android:name=".NewTripsActivity"
-            android:configChanges="orientation"
+
             android:label="@string/trips" />
         <activity
             android:name=".TripsActivity"

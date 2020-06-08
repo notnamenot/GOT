@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_timeline_black_24dp"
             android:contentDescription="TODO"
-            app:layout_constraintTop_toBottomOf="@+id/tv_points_val1"
+            app:layout_constraintTop_toTopOf="@+id/tv_points_val1"
             app:layout_constraintBottom_toTopOf="@id/tv_length_val"
             app:layout_constraintStart_toEndOf="@+id/img_points"
             app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_access_time_black_72dp"
             android:contentDescription="TODO"
-            app:layout_constraintTop_toBottomOf="@+id/tv_length_val"
+            app:layout_constraintTop_toTopOf="@+id/tv_length_val"
             app:layout_constraintBottom_toTopOf="@id/tv_time_val"
             app:layout_constraintStart_toStartOf="@+id/img_points"
             />
@@ -98,9 +98,10 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_trending_up_black_72dp"
             android:contentDescription="TODO"
-            app:layout_constraintTop_toBottomOf="@+id/tv_time_val"
+            app:layout_constraintTop_toTopOf="@+id/tv_time_val"
             app:layout_constraintBottom_toTopOf="@+id/tv_ups_val"
             app:layout_constraintStart_toStartOf="@+id/img_length"
+            app:layout_constraintEnd_toEndOf="@+id/img_length"
             />
 
         <TextView
@@ -122,9 +123,10 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_trending_down_black_72dp"
             android:contentDescription="TODO"
-            app:layout_constraintTop_toBottomOf="@+id/tv_ups_val"
+            app:layout_constraintTop_toTopOf="@+id/tv_ups_val"
             app:layout_constraintBottom_toTopOf="@+id/tv_downs_val"
             app:layout_constraintStart_toStartOf="@id/img_time"
+            app:layout_constraintEnd_toEndOf="@+id/img_time"
             />
 
         <TextView

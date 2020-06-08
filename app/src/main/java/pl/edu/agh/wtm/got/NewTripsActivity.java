@@ -53,7 +53,6 @@ public class NewTripsActivity extends AppCompatActivity implements TripsListFrag
         }
 
         if (savedInstanceState == null) {
-            System.out.println("savedInstanceState == null");
             dao = new GOTdao(this);
             List<Trip> trips = dao.getAllTrips();
 
@@ -69,7 +68,6 @@ public class NewTripsActivity extends AppCompatActivity implements TripsListFrag
 
             // set detail fragment
             if (findViewById(R.id.fl_trip_detail) != null) {
-                System.out.println("NewTripsActivity.onCreate findViewById(R.id.fl_trip_detail) != null");
                 Bundle arguments = new Bundle();
                 arguments.putInt(TripDetailFragment.ARG_ITEM_POS, 0);
                 TripDetailFragment tripDetailFragment = new TripDetailFragment();
