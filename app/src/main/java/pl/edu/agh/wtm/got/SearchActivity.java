@@ -158,6 +158,8 @@ public class SearchActivity extends AppCompatActivity {
 //                    edtStartPoint.clearListSelection();
                 actvStartPoint.setText("");
                 actvEndPoint.setText("");
+                actvStartPoint.setHint(getResources().getString(R.string.start_point));
+                actvEndPoint.setHint(getResources().getString(R.string.end_point));
                 startPoint = null;
                 endPoint = null;
 
@@ -214,7 +216,7 @@ public class SearchActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // TODO diseable button when points arent chosen
                 if (startPoint != null && endPoint != null) {
                     Graph g = new Graph(startPoint.getId(), endPoint.getId(), startPoint.getMountainChainId(), SearchActivity.this);
                     possibleRoutes.clear();
@@ -257,7 +259,7 @@ public class SearchActivity extends AppCompatActivity {
         GOTPointSuggestions.clear();
         GOTPointSuggestions.addAll(filteredGOTPoints);
         GOTPointAdapter.notifyDataSetChangedAll();
-
+        // TODO restore mountainchain spinner
         System.out.println("start:" + savedInstanceState.getInt(SELECTED_START_POINT_ID) + " end:" + savedInstanceState.getInt(SELECTED_END_POINT_ID));
         startPoint = dao.getGOTPoint(savedInstanceState.getInt(SELECTED_START_POINT_ID));
         endPoint = dao.getGOTPoint(savedInstanceState.getInt(SELECTED_END_POINT_ID));

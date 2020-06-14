@@ -48,7 +48,7 @@ public class BadgesActivity extends AppCompatActivity {
             downs += trip.getDowns();
         }
 
-        tvPointsVal.setText(points + " punktów");
+        tvPointsVal.setText(String.valueOf(points));
         tvLengthVal.setText(length + " km");
         tvTimeVal.setText(convertIntToTime(time));
         tvUpsVal.setText(metersToKilometers(ups) + " km");

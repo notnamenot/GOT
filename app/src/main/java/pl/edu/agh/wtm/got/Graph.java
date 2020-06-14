@@ -15,7 +15,7 @@ import pl.edu.agh.wtm.got.models.Subroute;
 
 // http://www.algorytm.org/algorytmy-grafowe/algorytm-dijkstry/dijkstra-j.html?fbclid=IwAR0EXm7R50_i6WWaFDYGyPc1FioUTMUvOBDnXbfD7arz8Zi1li6PWHlMxaU
 public class Graph {
-
+        //TODO jest przeszukiwanie wgłą, lepsze byłoby wszerz
 //    private Map<GOTPoint, Set<GOTPoint>> adjList ;
     private Map<Integer, Set<Integer>> adjList ;
 

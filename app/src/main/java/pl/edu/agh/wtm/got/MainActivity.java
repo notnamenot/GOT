@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     Button btn_badges;
     Button btn_test;
 
+//    MyBroadcastReceiver
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,5 +66,14 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(goToTestTripsView);
 //            }
 //        });
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
     }
 }

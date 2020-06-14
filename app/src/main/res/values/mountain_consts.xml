@@ -5,8 +5,6 @@
     <string name="sniezka">Śnieżka</string>
 
     <string name="c_gory_orlickie">Góry Orlickie</string> <!-- c - mountain chain -->
-    <string name="c_gory_bystrzyckie">Góry Bystrzyckie</string>
-    <string name="c_gory_stolowe">Góry Stołowe</string>
 
     <string name="orlica">Orlica</string>
     <string name="soltysia_kopa">Sołtysia Kopa</string>
@@ -17,13 +15,50 @@
     <string name="prz_polskie_wrota">Przełęcz Polskie Wrota</string> <!-- prz - przełęcz -->
     <string name="ludowe">Ludowe</string>
 
+    <string name="c_gory_bystrzyckie">Góry Bystrzyckie</string>
+    <string name="c_gory_stolowe">Góry Stołowe</string>
+    <string name="c_gory_izerskie">Góry Izerskie</string>
+    <string name="c_karkonosze">Karkonosze</string>
+
 
 <!--    -->
     <string name="r_karpaty">Karpaty</string>
     <string name="gerlach">Gerlach</string>
 
-<!--    -->
+
+    <string name="c_tatry">Tatry</string>
+
+    <string name="palenica_bialczanska">Palenica Białczańska</string>
+    <string name="wodogrzmoty_mickiewicza">Wodogrzmoty Mickiewicza</string>
+    <string name="dolina_roztoki">Dolina Roztoki</string>
+    <string name="sch_dolina_pieciu_stawow">Schronisko PTTK w Dolinie Pięciu Stawów Polskich</string>
+    <string name="siklawa">Siklawa</string>
+    <string name="sch_dolina_roztoki">Schronisko PTTK w Dolinie Roztoki</string>
+    <string name="sch_morskie_oko">Schronisko PTTK przy Morskim Oku</string>
+
+
+    <string name="c_pieniny">Pieniny</string>
+    <string name="c_bieszczady">Bieszczady</string>
+    <string name="c_gorce">Gorce</string>
+    <string name="c_beskid_sadecki">Beskid Sądecki</string>
+    <string name="c_beskid_zywiecki">Beskid Żywiecki</string>
+    <string name="c_beskid_maly">Beskid Mały</string>
+    <string name="c_beskid_makowski">Beskid Makowskie</string>
+    <string name="c_beskid_wyspowy">Beskid Wyspowy</string>
+    <string name="c_beskid_niski">Beskid Niski</string>
+
+
+    <!--    -->
     <string name="r_gory_swietokrzyskie">Góry Świętokrzyskie</string>
     <string name="lysica">Łysica</string>
+
+    <string name="c_pasmo_klonowskie">Pasmo Klonowskie</string>
+    <string name="c_pasmo_bostowskie">Pasmo Bostowskie</string>
+    <string name="c_pasmo_oblegorskie">Pasmo Oblęgorskie</string>
+    <string name="c_pasmo_maslowskie">Pasmo Masłowskie</string>
+    <string name="c_lysogory">Łysogóry</string>
+    <string name="c_pasmo_orlowinskie">Pasmo Orłowińskie</string>
+
+
 
 </resources>

@@ -24,11 +24,12 @@ import pl.edu.agh.wtm.got.models.Trip;
 //handles operations on database
 public class GOTdao extends SQLiteOpenHelper{
 
-    public static final String MOUNTAIN_RANGE_TABLE = "MOUNTAIN_RANGE_TABLE";
+    public static final String MOUNTAIN_RANGE_TABLE = "MOUNTAIN_RANGE_TABLE"; //TODO change to plular
     public static final String MOUNTAIN_CHAIN_TABLE = "MOUNTAIN_CHAIN_TABLE";
     public static final String GOT_POINT_TABLE = "GOT_POINT_TABLE";
     public static final String SUBROUTE_TABLE = "SUBROUTE_TABLE";
     public static final String TRIP_TABLE = "TRIP_TABLE";
+    public static final String TRIP_GOT_POINTS_TABLE = "TRIP_GOT_POINTS_TABLE";
 
     public static final String COLUMN_ID = "ID";
     public static final String COLUMN_MOUNTAIN_RANGE_ID = "MOUNTAIN_RANGE_ID";
@@ -44,6 +45,10 @@ public class GOTdao extends SQLiteOpenHelper{
     public static final String COLUMN_SUM_DOWNS = "SUM_DOWNS";
     public static final String COLUMN_SUM_UPS = "SUM_UPS";
     public static final String COLUMN_DATE = "DATE_INS";
+    public static final String COLUMN_TRIP_ID = "TRIP_ID";
+    public static final String COLUMN_GOT_POINT_ID = "GOT_POINT_ID";
+    public static final String COLUMN_GOT_POINT_NO = "GOT_POINT_NO";
+
 
     // łańcuch górski - np. Sudety
     public static final String CREATE_MOUNTAIN_RANGE_TABLE_STATEMENT = "CREATE TABLE " + MOUNTAIN_RANGE_TABLE + " (" +
@@ -72,7 +77,7 @@ public class GOTdao extends SQLiteOpenHelper{
             COLUMN_LENGTH + " REAL," +
             COLUMN_TIME + " INTEGER," +
             COLUMN_SUM_UPS + " INTEGER," +
-            COLUMN_SUM_DOWNS + " INTEGER)";
+            COLUMN_SUM_DOWNS + " INTEGER)"; // TODO bez sum, PK na from i to
 
     public static final String CREATE_TRIP_TABLE_STATEMENT = "CREATE TABLE " + TRIP_TABLE + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -84,8 +89,13 @@ public class GOTdao extends SQLiteOpenHelper{
             COLUMN_SUM_UPS + " INTEGER," +
             COLUMN_SUM_DOWNS + " INTEGER," +
 //            COLUMN_DATE + " INTEGER)";
-            COLUMN_DATE + " TEXT)";
+            COLUMN_DATE + " TEXT)"; //TODO wywalić to co jest w subroute
 //            COLUMN_DATE + " created_at DATETIME DEFAULT CURRENT_TIMESTAMP)";
+
+    public static final String CREATE_TRIP_GOT_POINTS_TABLE_STATEMENT = "CREATE TABLE " + TRIP_GOT_POINTS_TABLE + " (" +
+            COLUMN_TRIP_ID + " INTEGER, " +
+            COLUMN_GOT_POINT_ID + " INTEGER, " +
+            COLUMN_GOT_POINT_NO + " INTEGER)"; //TODO, potem wywalic from i to z trips
 
     private  Context context;
 
@@ -181,7 +191,7 @@ public class GOTdao extends SQLiteOpenHelper{
     public List<MountainChain> getMountainChains(int _mountainRangeId) {
         List<MountainChain> list = new ArrayList<>();
 
-        String queryString = "SELECT * FROM " + MOUNTAIN_CHAIN_TABLE + " WHERE " + COLUMN_MOUNTAIN_RANGE_ID + " = " + _mountainRangeId ;
+        String queryString = "SELECT * FROM " + MOUNTAIN_CHAIN_TABLE + " WHERE " + COLUMN_MOUNTAIN_RANGE_ID + " = " + _mountainRangeId + " ORDER BY " + COLUMN_NAME ;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString,null);
         if (cursor.moveToFirst()) {
@@ -230,7 +240,7 @@ public class GOTdao extends SQLiteOpenHelper{
     public List<GOTPoint> getGOTPoints(int _mountainChainId) {
         List<GOTPoint> list = new ArrayList<>();
 
-        String queryString = "SELECT * FROM " + GOT_POINT_TABLE + " WHERE " + COLUMN_MOUNTAIN_CHAIN_ID + " = " + _mountainChainId;
+        String queryString = "SELECT * FROM " + GOT_POINT_TABLE + " WHERE " + COLUMN_MOUNTAIN_CHAIN_ID + " = " + _mountainChainId + " ORDER BY " + COLUMN_NAME;
 
         System.out.println(queryString);
 
@@ -445,7 +455,7 @@ public class GOTdao extends SQLiteOpenHelper{
 
     private void fillMountainRanges(SQLiteDatabase db) {
         List<MountainRange> mountainRanges = new ArrayList<>();
-        mountainRanges.add(new MountainRange(0, getResource(R.string.r_sudety),300, getResource(R.string.sniezka)));
+        mountainRanges.add(new MountainRange(0, getResource(R.string.r_sudety),300, getResource(R.string.sniezka))); // wszedzie 0 bo autoincrement
         mountainRanges.add(new MountainRange(0, getResource(R.string.r_karpaty),1500, getResource(R.string.gerlach)));
         mountainRanges.add(new MountainRange(0, getResource(R.string.r_gory_swietokrzyskie),70, getResource(R.string.lysica)));
 
@@ -454,30 +464,62 @@ public class GOTdao extends SQLiteOpenHelper{
     }
 
     private void fillMountainChains(SQLiteDatabase db) {
-        int mountainRangeId = getMountainRangeId(db, getResource(R.string.r_sudety));
-        System.out.println("mountainRangeId" + mountainRangeId);
+        int mountainRangeIdSudety = getMountainRangeId(db, getResource(R.string.r_sudety));
+
+        System.out.println("mountainRangeId" + mountainRangeIdSudety);
 
         List<MountainChain> mountainChains = new ArrayList<>();
-        mountainChains.add(new MountainChain(0,getResource(R.string.c_gory_orlickie), 50, mountainRangeId));
-        mountainChains.add(new MountainChain(0,getResource(R.string.c_gory_bystrzyckie), 40, mountainRangeId));
-        mountainChains.add(new MountainChain(0,getResource(R.string.c_gory_stolowe), 100, mountainRangeId));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_gory_orlickie), 50, mountainRangeIdSudety));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_gory_bystrzyckie), 40, mountainRangeIdSudety));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_gory_stolowe), 100, mountainRangeIdSudety));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_gory_izerskie), 0, mountainRangeIdSudety));//?
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_karkonosze), 0, mountainRangeIdSudety));
+
+        int mountainRangeIdKarpaty = getMountainRangeId(db, getResource(R.string.r_karpaty));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_tatry), 0, mountainRangeIdKarpaty));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_pieniny), 0, mountainRangeIdKarpaty));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_bieszczady), 0, mountainRangeIdKarpaty));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_gorce), 0, mountainRangeIdKarpaty));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_beskid_maly), 0, mountainRangeIdKarpaty));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_beskid_makowski), 0, mountainRangeIdKarpaty));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_beskid_niski), 0, mountainRangeIdKarpaty));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_beskid_sadecki), 0, mountainRangeIdKarpaty));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_beskid_wyspowy), 0, mountainRangeIdKarpaty));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_beskid_zywiecki), 0, mountainRangeIdKarpaty));
+
+        int mountainRangeIdGorySwietokrzyskie = getMountainRangeId(db, getResource(R.string.r_gory_swietokrzyskie));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_lysogory), 0, mountainRangeIdGorySwietokrzyskie));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_pasmo_bostowskie), 0, mountainRangeIdGorySwietokrzyskie));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_pasmo_klonowskie), 0, mountainRangeIdGorySwietokrzyskie));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_pasmo_maslowskie), 0, mountainRangeIdGorySwietokrzyskie));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_pasmo_oblegorskie), 0, mountainRangeIdGorySwietokrzyskie));
+        mountainChains.add(new MountainChain(0,getResource(R.string.c_pasmo_orlowinskie), 0, mountainRangeIdGorySwietokrzyskie));
 
         insertMountainChains(db, mountainChains);
     }
 
     private void fillGOTPoints(SQLiteDatabase db) {
-        int mountainChainId = getMountainChainId(db, getResource(R.string.c_gory_orlickie));
-        System.out.println("mountainChainId" + mountainChainId);
+        int mountainChainIdGoryOrlickie = getMountainChainId(db, getResource(R.string.c_gory_orlickie));
 
         List<GOTPoint> gotPoints = new ArrayList<GOTPoint>();
-        gotPoints.add(new GOTPoint(0, getResource(R.string.orlica),1084, mountainChainId));
-        gotPoints.add(new GOTPoint(0, getResource(R.string.soltysia_kopa),896, mountainChainId));
-        gotPoints.add(new GOTPoint(0, getResource(R.string.sch_zieleniec),850, mountainChainId));
-        gotPoints.add(new GOTPoint(0, getResource(R.string.kozia_hala),740, mountainChainId));
-        gotPoints.add(new GOTPoint(0, getResource(R.string.duszniki_zdroj),533, mountainChainId));
-        gotPoints.add(new GOTPoint(0, getResource(R.string.duszniki_zdroj_park),540, mountainChainId));
-        gotPoints.add(new GOTPoint(0, getResource(R.string.prz_polskie_wrota),660, mountainChainId));
-        gotPoints.add(new GOTPoint(0, getResource(R.string.ludowe),675, mountainChainId));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.orlica),1084, mountainChainIdGoryOrlickie));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.soltysia_kopa),896, mountainChainIdGoryOrlickie));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.sch_zieleniec),850, mountainChainIdGoryOrlickie));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.kozia_hala),740, mountainChainIdGoryOrlickie));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.duszniki_zdroj),533, mountainChainIdGoryOrlickie));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.duszniki_zdroj_park),540, mountainChainIdGoryOrlickie));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.prz_polskie_wrota),660, mountainChainIdGoryOrlickie));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.ludowe),675, mountainChainIdGoryOrlickie));
+
+        int mountainChainIdTatry = getMountainChainId(db, getResource(R.string.c_tatry));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.palenica_bialczanska),984, mountainChainIdTatry));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.wodogrzmoty_mickiewicza),1100, mountainChainIdTatry));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.sch_dolina_roztoki),1031, mountainChainIdTatry));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.sch_morskie_oko),1406, mountainChainIdTatry));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.sch_dolina_pieciu_stawow),1672, mountainChainIdTatry));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.siklawa),1666, mountainChainIdTatry));
+        gotPoints.add(new GOTPoint(0, getResource(R.string.dolina_roztoki),1435, mountainChainIdTatry));
+
 
         insertGOTPoints(db, gotPoints);
     }
@@ -511,6 +553,40 @@ public class GOTdao extends SQLiteOpenHelper{
         subroutes.add(new Subroute(0, ludowe,prz_polskie_wrota,0,0.3,5,4,19));
         subroutes.add(new Subroute(0, ludowe,duszniki_zdroj,3,3.3,50,22,164));
         subroutes.add(new Subroute(0, duszniki_zdroj,ludowe,5,3.3,65,164,22));
+
+        int palenica_bialczanska = getGOTPointId(db,getResource(R.string.palenica_bialczanska));
+        int wodogrzmoty_mickiewicza = getGOTPointId(db,getResource(R.string.wodogrzmoty_mickiewicza));
+        int dolina_roztoki = getGOTPointId(db,getResource(R.string.dolina_roztoki));
+        int sch_dolina_pieciu_stawow = getGOTPointId(db,getResource(R.string.sch_dolina_pieciu_stawow));
+        int siklawa = getGOTPointId(db,getResource(R.string.siklawa));
+        int sch_dolina_roztoki = getGOTPointId(db,getResource(R.string.sch_dolina_roztoki));
+        int sch_morskie_oko = getGOTPointId(db,getResource(R.string.sch_morskie_oko));
+
+        subroutes.add(new Subroute(0, palenica_bialczanska,wodogrzmoty_mickiewicza,4,2.9,45,132,16));
+        subroutes.add(new Subroute(0, wodogrzmoty_mickiewicza,palenica_bialczanska,3,2.9,40,16,132));
+
+        subroutes.add(new Subroute(0, wodogrzmoty_mickiewicza,sch_dolina_roztoki,1,0.8,10,7,76));
+        subroutes.add(new Subroute(0, sch_dolina_roztoki,wodogrzmoty_mickiewicza,2,0.8,15,76,7));
+
+        subroutes.add(new Subroute(0, wodogrzmoty_mickiewicza,sch_morskie_oko,8,4.9,95,367,61));
+        subroutes.add(new Subroute(0, sch_morskie_oko,wodogrzmoty_mickiewicza,5,4.9,70,61,367));
+
+        subroutes.add(new Subroute(0, wodogrzmoty_mickiewicza,dolina_roztoki,7,3.8,90,389,54));
+        subroutes.add(new Subroute(0, dolina_roztoki,wodogrzmoty_mickiewicza,4,3.8,60,54,389));
+
+        subroutes.add(new Subroute(0, dolina_roztoki,sch_dolina_pieciu_stawow,3,1,40,249,12));
+        subroutes.add(new Subroute(0, sch_dolina_pieciu_stawow,dolina_roztoki,1,1,30,12,249));
+
+        subroutes.add(new Subroute(0, dolina_roztoki,siklawa,3,1.1,45,244,13));
+        subroutes.add(new Subroute(0, siklawa,dolina_roztoki,1,1.1,35,13,244));
+
+        subroutes.add(new Subroute(0, siklawa,sch_dolina_pieciu_stawow,1,0.6,10,14,8));
+        subroutes.add(new Subroute(0, sch_dolina_pieciu_stawow,siklawa,1,0.6,10,14,8));
+
+        subroutes.add(new Subroute(0, sch_dolina_pieciu_stawow,sch_morskie_oko,5,4.1,100,318,584));
+        subroutes.add(new Subroute(0, sch_morskie_oko,sch_dolina_pieciu_stawow,9,4.1,120,584,318));
+
+
 
         insertSubroutes(db,subroutes);
     }
